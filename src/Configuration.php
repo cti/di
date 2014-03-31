@@ -2,8 +2,6 @@
 
 namespace Nekufa\Di;
 
-use RangeException;
-
 /**
  * Class Configuration
  * @package Nekufa\Di

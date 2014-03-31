@@ -1,5 +1,7 @@
 {
     "name": "nekufa/di",
+    "description": "Dependency injection manager framework",
+    "license": "MIT",    
     "authors": [
         {
             "name": "Dmitry.Krokhin",
