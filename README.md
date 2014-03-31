@@ -125,8 +125,8 @@ class Application
 
     function init()
     {
-        echo '@value = ' . $this->property . PHP_EOL;
-        echo '@property is instance of '. get_class($this->module);
+        echo 'this.property = ' . $this->property . PHP_EOL;
+        echo 'this.module is instance of '. get_class($this->module);
     }
 }
 
@@ -158,7 +158,7 @@ class Application
 
     public function init()
     {
-        echo "Application works with module.state = " . $this->module->state;
+        echo "Application works with module state = " . $this->module->state;
     }
 }
 
@@ -188,7 +188,7 @@ use Nekufa\Di\Manager;
 
 class Transport 
 {
-    function send($message) 
+    function process($message) 
     {
         // ...
     }
@@ -198,7 +198,7 @@ class Mailer
 {
     function send(Transport $transport, $message) 
     {
-        $transport->send($message);
+        $transport->process($message);
     }
 }
 
