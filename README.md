@@ -56,6 +56,73 @@ $configuration->get('Database', 'username');
 
 ```
 
+# Constructor injection
+You can inject your dependencies in costructor
+```php
+<?php
+
+use Nekufa\Di\Manager;
+
+class Module
+{
+
+}
+
+class Application
+{
+    protected $module;
+
+    function __construct(Module $module)
+    {
+        $this->module = $module;
+    }
+}
+
+$manager = new Manager();
+
+// create Module, inject it is constructor and return application
+$manager->get('Application');
+```
+
+# Object initialization
+
+After your object were created, properties was set and all dependencies were injected init method is called.
+
+```php
+<?php
+
+use Nekufa\Di\Manager;
+
+class Module
+{
+
+}
+
+class Application
+{
+    protected $module;
+    public $property;
+
+    function __construct(Module $module)
+    {
+        $this->module = $module;
+    }
+
+    function init()
+    {
+        echo '@value = ' . $this->property . PHP_EOL;
+        echo '@property is instance of '. get_class($this->module);
+    }
+}
+
+$manager = new Manager();
+
+// create Module, inject it is constructor and return application
+$manager->get('Application', array(
+    'property' => 'my_value'
+));
+```
+
 # Property injection
 One of usefull scenario is to inject dependencies when object is created.  
 Injection works recursive, so if module requires another dependency - it would be resolved. 
