@@ -80,7 +80,7 @@ class Application
 
 $manager = new Manager();
 
-// create Module, inject it is constructor and return application
+// create Module, inject it in constructor and return application
 $manager->get('Application');
 ```
 
@@ -117,7 +117,7 @@ class Application
 
 $manager = new Manager();
 
-// create Module, inject it is constructor and return application
+// create Module, inject it in constructor, call init and return application
 $manager->get('Application', array(
     'property' => 'my_value'
 ));
