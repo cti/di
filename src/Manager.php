@@ -46,7 +46,7 @@ class Manager
     /**
      * @param string $source
      * @param string $destination
-     * @return Nekufa\Di\Manager
+     * @return Manager
      */
     public function setAlias($source, $destination)
     {
@@ -97,6 +97,9 @@ class Manager
         return $instance;
     }
 
+    /**
+     * @param string $class
+     */
     protected function createInstance($class, $config = array())
     {
         $configuration = $this->config->get($class);
@@ -160,7 +163,7 @@ class Manager
 
     /**
      * @param mixed $object 
-     * @return Nekufa\Di\Manager
+     * @return Manager
      */
     public function register($object, $class = null)
     {

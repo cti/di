@@ -48,7 +48,7 @@ class Configuration
     /**
      * @param string $class
      * @param string $property
-     * @param mixed  $default
+     * @param string  $default
      * @return mixed
      */
     public function get($class, $property = null, $default = null) 
@@ -86,7 +86,7 @@ class Configuration
     /**
      * @param string $source
      * @param string $destination
-     * @return Nekufa\Di\Configuration
+     * @return Configuration
      */
     public function setAlias($source, $destination)
     {
