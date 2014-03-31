@@ -1,12 +1,17 @@
 # Dependency Manager
-[![Build Status](https://travis-ci.org/nekufa/di.svg?branch=1.0.1)](https://travis-ci.org/nekufa/di)
+
+[![Latest Stable Version](https://poser.pugx.org/nekufa/di/v/stable.png)](https://packagist.org/packages/nekufa/di)
+[![Total Downloads](https://poser.pugx.org/nekufa/di/downloads.png)](https://packagist.org/packages/nekufa/di)
+[![License](https://poser.pugx.org/nekufa/di/license.png)](https://packagist.org/packages/nekufa/di)
+[![Build Status](https://travis-ci.org/nekufa/di.svg)](https://travis-ci.org/nekufa/di)
 [![Coverage Status](https://coveralls.io/repos/nekufa/di/badge.png)](https://coveralls.io/r/nekufa/di)
+
 
 This component implements dependency injection pattern.   
 Manager can inject properties, configure objects and resolve depenencies while calling methods.  
 
 # Installation
-Use composer!
+Usin composer.
 ```json
 {
     "require": {
