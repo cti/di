@@ -63,8 +63,8 @@ class Callback
     {
         $arguments = array();
         foreach ($this->arguments as $index => $argument) {
-            if(!is_numeric($index) && isset($parameters[$index])) {
-                $arguments[] = $parameters[$index];
+            if(is_string($argument) && isset($parameters[$argument])) {
+                $arguments[] = $parameters[$argument];
             } elseif ($argument instanceof Reference) {
 
                 // find parameter by class
@@ -75,8 +75,6 @@ class Callback
                     }
                 }
                 $arguments[] = $argument->getInstance($manager);
-            } elseif (isset($parameters[$argument])) {
-                $arguments[] = $parameters[$argument];
             } else {
                 if (count(array_filter(array_keys($parameters), 'is_int')) > 0) {
                     $arguments[] = array_shift($parameters);

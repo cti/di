@@ -15,6 +15,8 @@ class DiTests extends PHPUnit_Framework_TestCase
 
         $m = new Manager($configuration);
 
+        $this->assertSame($configuration, $m->getConfiguration());
+
         $this->assertSame($m->get('Common\Module')->getState(), 'active');
         $this->assertSame($m->create('Common\Module')->getState(), 'active');
 
@@ -54,6 +56,14 @@ class DiTests extends PHPUnit_Framework_TestCase
         $m = new Manager;
         $module = $m->get('Common\Application')->getModule();
         $this->assertSame($module, $m->get('Common\Module'));
+    }
+
+    public function testContains()
+    {
+        $manager = new Manager();
+        $this->assertFalse($manager->contains('Common\Module'));
+        $manager->get('Common\Module');
+        $this->assertTrue($manager->contains('Common\Module'));
     }
 
     public function testMethodInjection()
