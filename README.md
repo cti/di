@@ -1,4 +1,7 @@
 # Dependency Manager
+[![Build Status](https://travis-ci.org/nekufa/di.svg?branch=1.0.1)](https://travis-ci.org/nekufa/di)
+[![Coverage Status](https://coveralls.io/repos/nekufa/di/badge.png)](https://coveralls.io/r/nekufa/di)
+
 This component implements dependency injection pattern.   
 Manager can inject properties, configure objects and resolve depenencies while calling methods.  
 
