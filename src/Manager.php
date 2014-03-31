@@ -16,6 +16,11 @@ class Manager
     /**
      * @var array
      */
+    protected $alias = array();
+
+    /**
+     * @var array
+     */
     protected $instance = array();
 
     /**
@@ -45,11 +50,28 @@ class Manager
 
     /**
      * @param string $class
+     * @param string $source
+     * @return Nekufa\Di\Manager
+     */
+    public function setAlias($class, $source)
+    {
+        if(isset($this->alias[$class])) {
+            throw new Exception(sprintf("Alias %s is already registered", $class));
+        }
+        $this->alias[$class] = $source;
+        return $this;
+    }
+
+    /**
+     * @param string $class
      * @return mixed
      * @throws Exception
      */
     public function get($class)
     {
+        if(isset($this->alias[$class])) {
+            return $this->get($this->alias[$class]);
+        }
         if (!$class) {
             throw new Exception();
         }
@@ -70,6 +92,9 @@ class Manager
      */
     public function create($class, $config = array())
     {
+        if(isset($this->alias[$class])) {
+            return $this->get($this->alias[$class], $config);
+        }
 
         $instance = $this->createInstance($class, $config);
 
@@ -143,6 +168,7 @@ class Manager
 
     /**
      * @param mixed $object 
+     * @return Nekufa\Di\Manager
      */
     public function register($object, $class = null)
     {
@@ -153,6 +179,7 @@ class Manager
             throw new Exception("Error Injecting $class");
         }
         $this->instance[$class] = $object;
+        return $this;
     }
 
     /**

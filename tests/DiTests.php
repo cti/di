@@ -58,6 +58,14 @@ class DiTests extends PHPUnit_Framework_TestCase
         $this->assertSame($module, $m->get('Common\Module'));
     }
 
+    public function testAlias()
+    {
+        $manager = new Manager;
+        $manager->setAlias('app', 'Common\Application');
+        $this->assertSame($manager->get('app'), $manager->get('Common\Application'));
+        $this->assertInstanceOf('Common\Application', $manager->create('app'));
+    }
+
     public function testContains()
     {
         $manager = new Manager();
@@ -95,6 +103,15 @@ class DiTests extends PHPUnit_Framework_TestCase
             $m->call('Common\Application', 'extractModuleFromManager', array($anotherManager)), 
             $anotherModule
         );
+    }
+
+    public function testDuplicateAliasException()
+    {
+        $this->setExpectedException('Exception');
+        
+        $manager = new Manager;
+        $manager->setAlias('app', 'Common\Application');
+        $manager->setAlias('app', 'Common\Module');
     }
 
     public function testMethodParamNotFoundException()
