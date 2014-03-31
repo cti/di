@@ -11,6 +11,11 @@ use RangeException;
 class Configuration
 {
     /**
+     * @var array
+     */
+    protected $alias;
+
+    /**
      * @var object
      */
     protected $data;
@@ -18,9 +23,15 @@ class Configuration
     /**
      * @param array $data
      */
-    function __construct($data = null)
+    function __construct($data = array())
     {
-        $this->data = $data;
+        foreach($data as $k => $v) {
+            if(is_string($v)) {
+                $this->alias[$k] = $v;
+            } else {
+                $this->data[$k] = $v;
+            }
+        }
     }
 
     /**
@@ -64,6 +75,37 @@ class Configuration
                 }
             }
         }
+    }
+
+    /**
+     * @param string $source
+     */
+    public function hasAlias($source)
+    {
+        return isset($this->alias[$source]);
+    }
+
+    /**
+     * @param string $source
+     * @param string $destination
+     * @return Nekufa\Di\Configuration
+     */
+    public function setAlias($source, $destination)
+    {
+        if(isset($this->alias[$source])) {
+            throw new Exception(sprintf("Alias %s is already registered", $source));
+        }
+        $this->alias[$source] = $destination;
+        return $this;
+    }
+
+    /**
+     * @param string $source
+     * @return string
+     */
+    public function getAlias($source)
+    {
+        return $this->alias[$source];
     }
 
 }

@@ -16,11 +16,6 @@ class Manager
     /**
      * @var array
      */
-    protected $alias = array();
-
-    /**
-     * @var array
-     */
     protected $instance = array();
 
     /**
@@ -49,16 +44,13 @@ class Manager
     }
 
     /**
-     * @param string $class
      * @param string $source
+     * @param string $destination
      * @return Nekufa\Di\Manager
      */
-    public function setAlias($class, $source)
+    public function setAlias($source, $destination)
     {
-        if(isset($this->alias[$class])) {
-            throw new Exception(sprintf("Alias %s is already registered", $class));
-        }
-        $this->alias[$class] = $source;
+        $this->config->setAlias($source, $destination);
         return $this;
     }
 
@@ -69,8 +61,8 @@ class Manager
      */
     public function get($class)
     {
-        if(isset($this->alias[$class])) {
-            return $this->get($this->alias[$class]);
+        if($this->config->hasAlias($class)) {
+            return $this->get($this->config->getAlias($class));
         }
         if (!$class) {
             throw new Exception();
@@ -92,8 +84,8 @@ class Manager
      */
     public function create($class, $config = array())
     {
-        if(isset($this->alias[$class])) {
-            return $this->get($this->alias[$class], $config);
+        if($this->config->hasAlias($class)) {
+            return $this->create($this->config->getAlias($class));
         }
 
         $instance = $this->createInstance($class, $config);

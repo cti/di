@@ -66,6 +66,16 @@ class DiTests extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Common\Application', $manager->create('app'));
     }
 
+    public function testAliasInConfiguration()
+    {
+        $configuration = new Configuration(array(
+            'app' => 'Common\Application'
+        ));
+
+        $manager = new Manager($configuration);
+        $this->assertInstanceOf('Common\Application', $manager->get('app'));
+    }
+
     public function testContains()
     {
         $manager = new Manager();
