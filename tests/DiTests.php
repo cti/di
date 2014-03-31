@@ -76,6 +76,14 @@ class DiTests extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Common\Application', $manager->get('app'));
     }
 
+    public function testInterfaceImplementation()
+    {
+        $manager = new Manager();
+        $manager->setAlias('Common\GatewayInterface', 'Common\ProxyGateway');
+
+        $this->assertInstanceOf('Common\ProxyGateway', $manager->get('Common\GatewayInterface'));
+    }
+
     public function testContains()
     {
         $manager = new Manager();
