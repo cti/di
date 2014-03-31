@@ -207,3 +207,40 @@ $manager->call('Mailer', 'send', array('message' => 'Hello world!');
 $manager->call('Mailer', 'send', array('Hello world!');
 
 ```
+
+# Using Alias
+You can alias one class with another or use this technique to select interface implementation
+
+```php
+<?php
+
+use Nekufa\Di\Manager;
+
+interface GatewayInterface {}
+
+class DirectGateway implements GatewayInterface {}
+class ProxyGateway implements GatewayInterface {}
+
+class Application
+{
+    /**
+     * @inject
+     * @var GatewayInterface
+     */
+    private $gateway;
+
+    function init()
+    {
+        echo get_class($this->gateway);
+    }
+}
+
+$manager = new Manager;
+$manager->setAlias('DirectGateway', 'GatewayInterface');
+$manager->get('Application'); // prints DirectGateway
+
+$manager = new Manager;
+$manager->setAlias('ProxyGateway', 'GatewayInterface');
+$manager->get('Application'); // prints ProxyGateway
+
+```
