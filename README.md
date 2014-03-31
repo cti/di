@@ -5,6 +5,16 @@
 This component implements dependency injection pattern.   
 Manager can inject properties, configure objects and resolve depenencies while calling methods.  
 
+# Installation
+Use composer!
+```json
+{
+    "require": {
+        "nekufa/di": "*"    
+    }
+}
+```
+
 # Object configuration
 Configuration param is optional, but it is very useful for configure instances.
 
