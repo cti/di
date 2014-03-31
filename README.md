@@ -143,7 +143,7 @@ class Application
 
     public function init()
     {
-        echo "Application works in module.state = " . $this->module->state;
+        echo "Application works with module.state = " . $this->module->state;
     }
 }
 
@@ -155,7 +155,7 @@ class Module
 $manager = new Manager();
 
 // change class configuration
-$manager->get('Nekufa\Di\Configuration')->set('Module', 'state', 'active');
+$manager->getConfiguration()->set('Module', 'state', 'active');
 
 
 // create Module, set state property, create Application, inject module and call init

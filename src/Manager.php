@@ -36,6 +36,14 @@ class Manager
     }
 
     /**
+     * @return Nekufa\Di\Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->config;
+    }
+
+    /**
      * @param string $class
      * @return mixed
      * @throws Exception
