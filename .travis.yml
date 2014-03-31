@@ -1,0 +1,20 @@
+language: php
+
+php:
+  - 5.3
+
+before_script:
+  - composer selfupdate
+  - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - composer install --dev --no-interaction
+
+script:
+  - php vendor/bin/phpunit -c phpunit.xml.dist
+
+after_script:
+  - php vendor/bin/coveralls
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
