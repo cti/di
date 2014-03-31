@@ -5,7 +5,7 @@
 [![License](https://poser.pugx.org/nekufa/di/license.png)](https://packagist.org/packages/nekufa/di)
 [![Build Status](https://travis-ci.org/nekufa/di.svg)](https://travis-ci.org/nekufa/di)
 [![Coverage Status](https://coveralls.io/repos/nekufa/di/badge.png)](https://coveralls.io/r/nekufa/di)
-
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/0063d4ab-e812-43e4-a2a7-ebd40be77593/mini.png)](https://insight.sensiolabs.com/projects/0063d4ab-e812-43e4-a2a7-ebd40be77593)
 
 This component implements dependency injection pattern.   
 Manager can inject properties, configure objects and resolve depenencies while calling methods.  
