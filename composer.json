@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Base\\Di\\" : "src/"
+            "Nekufa\\Di\\" : "src/"
         }
     },
     "require-dev": {

@@ -8,8 +8,8 @@ Configuration param is optional, but it is very useful for configure instances.
 ```php
 <?php
 
-use Base\Di\Configuration;
-use Base\Di\Manager;
+use Nekufa\Di\Configuration;
+use Nekufa\Di\Manager;
 
 $configuration = new Configuration(array(
     'ClassName' => array(
@@ -29,7 +29,7 @@ You can merge configuration from different files and set properties directly.
 ```php
 <?php
 
-use Base\Di\Configuration;
+use Nekufa\Di\Configuration;
 
 $configuration = new Configuration();
 
@@ -60,8 +60,8 @@ Injection works recursive, so if module requires another dependency - it would b
 ```php
 <?php
 
-use Base\Di\Configuration;
-use Base\Di\Manager;
+use Nekufa\Di\Configuration;
+use Nekufa\Di\Manager;
 
 class Application
 {
@@ -85,7 +85,7 @@ class Module
 $manager = new Manager();
 
 // change class configuration
-$manager->get('Base\Di\Configuration')->set('Module', 'state', 'active');
+$manager->get('Nekufa\Di\Configuration')->set('Module', 'state', 'active');
 
 
 // create Module, set state property, create Application, inject module and call init
@@ -99,7 +99,7 @@ One of the killer feature is ability resolve dependencies for method calling.
 ```php
 <?php
 
-use Base\Di\Manager;
+use Nekufa\Di\Manager;
 
 class Transport 
 {

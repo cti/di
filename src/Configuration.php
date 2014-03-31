@@ -1,12 +1,12 @@
 <?php
 
-namespace Base\Di;
+namespace Nekufa\Di;
 
 use RangeException;
 
 /**
  * Class Configuration
- * @package Base\Di
+ * @package Nekufa\Di
  */
 class Configuration
 {

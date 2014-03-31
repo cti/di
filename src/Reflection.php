@@ -1,6 +1,6 @@
 <?php
 
-namespace Base\Di;
+namespace Nekufa\Di;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -8,7 +8,7 @@ use ReflectionProperty;
 
 /**
  * Class Reflection
- * @package Base\Di
+ * @package Nekufa\Di
  */
 abstract class Reflection
 {

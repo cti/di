@@ -1,15 +1,15 @@
 <?php
 
-namespace Base\Di;
+namespace Nekufa\Di;
 
 /**
  * Class Manager
- * @package Base\Di
+ * @package Nekufa\Di
  */
 class Manager
 {
     /**
-     * @var Base\Di\Configuration
+     * @var Nekufa\Di\Configuration
      */
     protected $config;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Base\Di;
+namespace Nekufa\Di;
 
 /**
  * Class Reference
- * @package Base\Di
+ * @package Nekufa\Di
  */
 class Reference
 {
