@@ -96,7 +96,8 @@ class Application
 $manager = new Manager();
 
 // create Module, inject it in constructor and return application
-$manager->get('Application');
+$application = $manager->get('Application');
+
 ```
 
 # Object initialization
@@ -179,7 +180,7 @@ $manager->get('Application');
 ```
 
 # Method caller
-One of the killer feature is ability resolve dependencies for method calling.
+The killer feature is ability resolve dependencies for method calling.
 
 ```php
 <?php
