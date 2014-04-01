@@ -11,7 +11,7 @@ This component implements dependency injection pattern.
 Manager can inject properties, configure objects and resolve depenencies while calling methods.  
 
 # Installation
-Usin composer.
+Using composer.
 ```json
 {
     "require": {
@@ -21,7 +21,7 @@ Usin composer.
 ```
 
 # Object configuration
-Configuration param is optional, but it is very useful for configure instances.
+Configuration param is optional, but it is very useful for instance configuration.
 
 ```php
 <?php
@@ -42,7 +42,7 @@ $manager->create('ClassName')->property; // value
 
 ```
 
-You can merge configuration from different files and set properties directly.
+You can merge configuration from different arrays and set properties directly.
 
 ```php
 <?php
