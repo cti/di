@@ -1,6 +1,6 @@
 <?php
 
-use Cti\Di\Container;
+use Cti\Di\Locator;
 
 class LocatorTest extends PHPUnit_Framework_TestCase
 {
@@ -8,68 +8,84 @@ class LocatorTest extends PHPUnit_Framework_TestCase
     function testFailRegistration()
     {
         $this->setExpectedException('Exception');
-        $c = new Container(array(
-            'config' => array(),
-            'services' => array(
-                'nullable' => null
-            )
+        $locator = new Locator();
+        $locator->parse(array(
+            'nullable' => null
         ));
     }
 
     function testFailArrayRegistration()
     {
         $this->setExpectedException('Exception');
-        $c = new Container(array(
-            'config' => array(),
-            'services' => array(
-                'nullable' => array()
-            )
+        $locator = new Locator();
+        $locator->parse(array(
+            'nullable' => array()
         ));
+    }
+
+    function testFailParsing()
+    {
+        $this->setExpectedException('Exception');
+        $locator = new Locator;
+        $locator->load('?');
+    }
+    
+    function testFileLoading()
+    {
+        $locator = new Locator;
+        $locator->load(__DIR__ . '/resources/services.php');
+        $this->assertInstanceOf('Common\Module', $locator->get('module'));
+    }
+
+
+    function testFilesystemLoading()
+    {
+        $locator = new Locator;
+        $locator->load(__DIR__ . '/resources/services.php');
+        $this->assertInstanceOf('Common\Module', $locator->get('module'));
     }
 
     function testLocator()
     {
-        $container = new Container(array(
-            'config' => array(),
-            'services' => array(
+        $services = array(
 
-                'base' => 'Common\Module',
+            'base' => 'Common\Module',
 
-                'base2' => array('Common\Module', array(
-                    'state' => 'zzzz'
-                )),
+            'base2' => array('Common\Module', array(
+                'state' => 'zzzz'
+            )),
 
-                'base3' => array(
-                    'class' => 'Common\Module',
-                    'config' => array(
-                        'state' => 'q',
-                    ),
+            'base3' => array(
+                'class' => 'Common\Module',
+                'config' => array(
+                    'state' => 'q',
                 ),
-
-                'base3x' => array(
-                    'class' => 'Common\Module',
-                    'configuration' => array(
-                        'state' => 'q',
-                    ),
-                ),
-
-                'base4' => function() {
-                    return new Common\Module;
-                },
-
-                'base5' => array(
-                    'Common\Module',
-                    'state' => 'hm'
-                ),
-
-                'base6' => array(
-                    'class' => 'Common\Module', 
-                    'state' => 'wtf'
-                )
             ),
-        ));
 
-        $locator = $container->getLocator();
+            'base3x' => array(
+                'class' => 'Common\Module',
+                'configuration' => array(
+                    'state' => 'q',
+                ),
+            ),
+
+            'base4' => function() {
+                return new Common\Module;
+            },
+
+            'base5' => array(
+                'Common\Module',
+                'state' => 'hm'
+            ),
+
+            'base6' => array(
+                'class' => 'Common\Module', 
+                'state' => 'wtf'
+            )
+        );
+
+        $locator = new Locator();
+        $locator->load($services);
 
         $this->assertInstanceOf('Common\Module', $locator->get('base'));
         $this->assertInstanceOf('Common\Module', $locator->get('base2'));

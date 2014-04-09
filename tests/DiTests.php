@@ -5,6 +5,30 @@ use Cti\Di\Manager;
 
 class DiTests extends PHPUnit_Framework_TestCase
 {
+    public function testFilesystemLoader()
+    {
+        $configuration = new Configuration();
+        $configuration->load(__DIR__ . '/resources/config.php');
+
+        // local config
+        $this->assertSame($configuration->get('a'), array('a2'));
+
+        $configuration->set('a', 0, 'a3');
+        $this->assertSame($configuration->get('a'), array('a3'));
+
+        $configuration->load(array('a' => array('a4')));
+        $this->assertSame($configuration->get('a'), array('a4'));
+
+    }
+
+    function testFailParsing()
+    {
+        $this->setExpectedException('Exception');
+        $locator = new Configuration;
+        $locator->load('?');
+    }
+    
+
     public function testInstanceConfiguration()
     {
         $configuration = new Configuration(array(

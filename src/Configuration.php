@@ -75,6 +75,26 @@ class Configuration
         }
     }
 
+    public function load($config)
+    {
+        if(is_array($config)) {
+            $this->merge($config);
+            return true;
+        } 
+
+        if(file_exists($config)) {
+            $this->merge(include $config);
+            $local = dirname($config) . DIRECTORY_SEPARATOR . 'local.' . basename($config);
+            if(file_exists($local)) {
+                $this->merge(include $local);
+            }
+
+            return true;
+        }
+
+        throw new Exception(sprintf("Error processing application configuration: %s", $params['config']));
+    }
+
     /**
      * @param string $source
      */

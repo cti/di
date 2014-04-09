@@ -1,3 +1,5 @@
 <?php
 
-return array();
+return array(
+    'module' => 'Common\Module'
+);

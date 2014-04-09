@@ -8,9 +8,24 @@ class Locator
     protected $instances = array();
     protected $definition = array();
 
-    function __construct(Manager $manager)
+    function __construct($manager = null)
     {
+        if(is_null($manager)) {
+            $manager = new Manager;
+        }
         $this->manager = $manager;
+    }
+
+    function load($config)
+    {
+        if(is_array($config)) {
+            $data = $config;
+        } elseif(file_exists($config)) {
+            $data = include $config;
+        } else {
+            throw new Exception(sprintf("Error processing locator configuration: %s", $config));            
+        }
+        $this->parse($data);
     }
 
     function parse($data)
