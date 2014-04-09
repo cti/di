@@ -68,9 +68,17 @@ class Manager
             throw new Exception();
         }
         if (!isset($this->instance[$class])) {
-            $this->instance[$class] = $this->createInstance($class);
 
-            if (method_exists($class, 'init')) {
+            $instance = null;
+
+            if(isset($this->instance['Cti\Di\Locator'])) {
+                $locator = $this->instance['Cti\Di\Locator'];
+                $instance = $locator->findByClass($class);
+            }
+
+            $this->instance[$class] = $instance ? $instance : $this->createInstance($class);
+
+            if (!$instance && method_exists($class, 'init')) {
                 $this->call($this->instance[$class], 'init');
             }
         }
