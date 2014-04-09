@@ -15,7 +15,7 @@ For example you have file `/path/to/config.php' wich is in your version control:
 ```
 
 You can create another file '/path/to/local.config.php' and exclude it from version control.  
-In this file you ovveride some class properties:
+In this file you override some class properties:
 
 ```php
 <?php return array(
