@@ -5,6 +5,12 @@ use Cti\Di\Locator;
 class LocatorTest extends PHPUnit_Framework_TestCase
 {
 
+    function testLocatorRegistration()
+    {
+        $locator = new Locator;
+        $this->assertSame($locator, $locator->getManager()->get('Cti\Di\Locator'));
+    }
+
     function testFailRegistration()
     {
         $this->setExpectedException('Exception');

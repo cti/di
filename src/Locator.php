@@ -62,7 +62,9 @@ class Locator
         }
 
         if($name == 'manager') {
-            return $this->instances[$name] = new Manager;
+            $this->instances[$name] = new Manager;
+            $this->instances[$name]->register($this);
+            return $this->instances[$name];
         }
 
         if(!isset($this->definition[$name])) {
