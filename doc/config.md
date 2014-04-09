@@ -1,6 +1,6 @@
 # Manage by config file
 
-The easiest way is to use configuration file in php format.
+The easiest way is to use configuration file in php format.  
 For example you have file `/path/to/config.php' wich is in your version control:
 
 ```php
@@ -14,8 +14,8 @@ For example you have file `/path/to/config.php' wich is in your version control:
 );
 ```
 
-you can place another file '/path/to/local.config.php' and exclude it from version control.
-In this file you can ovveride some class properties:
+You can create another file '/path/to/local.config.php' and exclude it from version control.  
+In this file you override some class properties:
 
 ```php
 <?php return array(
@@ -25,7 +25,7 @@ In this file you can ovveride some class properties:
 );
 ```
 
-Usage is pretty simple - use load method and Configuration will lookup "local.*"
+Usage of two files is pretty simple - use load method and Configuration will lookup "local.*" file itself.
 
 ```php
 <?php
