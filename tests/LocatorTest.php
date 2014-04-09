@@ -5,6 +5,13 @@ use Cti\Di\Locator;
 class LocatorTest extends PHPUnit_Framework_TestCase
 {
 
+    function testClassLookup()
+    {
+        $locator = new Locator;
+        $this->assertSame($locator->findByClass('Cti\Di\Manager'), $locator->getManager());
+        $this->assertNull($locator->findByClass(__CLASS__));
+    }
+
     function testLocatorRegistration()
     {
         $locator = new Locator;

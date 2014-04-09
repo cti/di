@@ -7,10 +7,14 @@ class Locator
     protected $instances = array();
 
     protected $definition = array(
-        'manager' => ''
+        'manager' => array(
+            'class' => 'Cti\Di\Manager',
+            'configuration' => array()
+        )
     );
 
     protected $methods = array();
+    protected $classes = array();
 
     function load($config)
     {
@@ -55,6 +59,32 @@ class Locator
         return ucfirst($string);
     }
 
+    function findByClass($class)
+    {
+        if(!isset($this->classes[$class])) {
+            foreach($this->definition as $name => $config) {
+                if(isset($config['class'])) {
+                    if(!isset($this->classes[$config['class']])) {
+                        $this->classes[$config['class']] = array();
+                    } 
+                    if(!in_array($name, $this->classes[$config['class']])) {
+                        $this->classes[$config['class']][] = $name;
+                    }
+                }
+            }
+
+        }
+
+        if(!isset($this->classes[$class])) {
+            $this->classes[$class] = array();
+        }
+
+        if(count($this->classes[$class]) == 1) {
+            return $this->get($this->classes[$class][0]);
+        }
+        return null;
+    }
+
     function get($name)
     {
         if(isset($this->instances[$name])) {
@@ -90,6 +120,8 @@ class Locator
 
     function register($name, $config)
     {
+        $this->classes = array();
+
         if(is_callable($config)) {
             
             $this->definition[$name] = array(
