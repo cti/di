@@ -1,7 +1,7 @@
 {
     "name": "cti/di",
     "description": "Dependency Injection Container",
-    "license": "MIT",    
+    "license": "MIT",
     "authors": [
         {
             "name": "Dmitry.Krokhin",
