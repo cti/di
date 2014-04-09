@@ -23,6 +23,8 @@ class Manager
      */
     protected $callback = array();
 
+    public $enableServiceLookup = true;
+
     /**
      * @param Configuration $config
      */
@@ -33,6 +35,26 @@ class Manager
         }
         $this->register($this);
         $this->register($this->config = $config);
+    }
+
+    /**
+     * enable locator service usage
+     * @return Cti\Di\Manager
+     */
+    function enableServiceLookup()
+    {
+        $this->enableServiceLookup = true;
+        return $this;
+    }
+
+    /**
+     * disable locator service usage
+     * @return Cti\Di\Manager
+     */
+    function disableServiceLookup()
+    {
+        $this->enableServiceLookup = false;
+        return $this;
     }
 
     /**
@@ -71,7 +93,7 @@ class Manager
 
             $instance = null;
 
-            if(isset($this->instance['Cti\Di\Locator'])) {
+            if($this->enableServiceLookup && isset($this->instance['Cti\Di\Locator'])) {
                 $locator = $this->instance['Cti\Di\Locator'];
                 $instance = $locator->findByClass($class);
             }

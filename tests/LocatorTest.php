@@ -9,6 +9,12 @@ class LocatorTest extends PHPUnit_Framework_TestCase
     {
         $locator = new Locator();
         $locator->register('test', $this);
+        $locator->getManager()->disableServiceLookup();
+        $this->assertNotSame($this, $locator->getManager()->get('LocatorTest'));
+
+        $locator = new Locator();
+        $locator->register('test', $this);
+        $locator->getManager()->enableServiceLookup();
         $this->assertSame($this, $locator->getManager()->get('LocatorTest'));
     }
 
