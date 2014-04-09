@@ -4,17 +4,13 @@ namespace Cti\Di;
 
 class Locator
 {
-    protected $manager;
     protected $instances = array();
-    protected $definition = array();
 
-    function __construct($manager = null)
-    {
-        if(is_null($manager)) {
-            $manager = new Manager;
-        }
-        $this->manager = $manager;
-    }
+    protected $definition = array(
+        'manager' => ''
+    );
+
+    protected $methods = array();
 
     function load($config)
     {
@@ -35,11 +31,40 @@ class Locator
         }
     }
 
+    function __call($method, $aguments)
+    {
+        if(!isset($this->methods[$method])) {
+            foreach (array_keys($this->definition) as $service) {
+                $name = 'get' . $this->camelCaseServiceName($service);
+                $this->methods[$name] = $service;
+            }
+        }
+        if(!isset($this->methods[$method])) {
+            throw new Exception(sprintf("Error processing getter - %s", $method));
+        }
+        return $this->get($this->methods[$method]);
+    }
+
+    function camelCaseServiceName($string)
+    {
+        foreach(array('.', '_', '-') as $delimiter) {
+            if(strstr($string, $delimiter)) {
+                return implode('', array_map('ucfirst', explode($delimiter, $string)));
+            }
+        }
+        return ucfirst($string);
+    }
+
     function get($name)
     {
         if(isset($this->instances[$name])) {
             return $this->instances[$name];
         }
+
+        if($name == 'manager') {
+            return $this->instances[$name] = new Manager;
+        }
+
         if(!isset($this->definition[$name])) {
             throw new Exception(sprintf("Service %s not defined", $name));
         }
@@ -58,7 +83,7 @@ class Locator
             }
         }
 
-        return $this->instances[$name] = $this->manager->create($definition['class'], $configuration);
+        return $this->instances[$name] = $this->get('manager')->create($definition['class'], $configuration);
     }
 
     function register($name, $config)
