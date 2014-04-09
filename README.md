@@ -19,9 +19,10 @@ Using composer.
 }
 ```
 
-# Architecture
-* Configuration file is used for instance configuration throw manager
-* Manager creates instance injecting all dependencies
-* Service locator works on top level of manager and provides services
+# Components
 
-**See the `doc` directory for more detailed documentation.
+* Configuration used by Manager while create an instance
+* Manager creates instance injecting all dependencies
+* Service locator works on top of Manager
+
+See the `doc` directory for more detailed documentation.
