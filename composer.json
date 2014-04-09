@@ -1,16 +1,16 @@
 {
-    "name": "nekufa/di",
-    "description": "Dependency injection manager framework",
+    "name": "cti/di",
+    "description": "Dependency Injection Container",
     "license": "MIT",    
     "authors": [
         {
             "name": "Dmitry.Krokhin",
-            "email": "nekufa@gmail.com"
+            "email": "Cti@gmail.com"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Nekufa\\Di\\" : "src/"
+            "Cti\\Di\\" : "src/"
         }
     },
     "require-dev": {

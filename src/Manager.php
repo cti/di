@@ -1,15 +1,15 @@
 <?php
 
-namespace Nekufa\Di;
+namespace Cti\Di;
 
 /**
  * Class Manager
- * @package Nekufa\Di
+ * @package Cti\Di
  */
 class Manager
 {
     /**
-     * @var Nekufa\Di\Configuration
+     * @var Cti\Di\Configuration
      */
     protected $config;
 
@@ -36,7 +36,7 @@ class Manager
     }
 
     /**
-     * @return Nekufa\Di\Configuration
+     * @return Cti\Di\Configuration
      */
     public function getConfiguration()
     {
@@ -46,7 +46,7 @@ class Manager
     /**
      * @param string $source
      * @param string $destination
-     * @return Manager
+     * @return Cti\Di\Manager
      */
     public function setAlias($source, $destination)
     {
@@ -97,9 +97,6 @@ class Manager
         return $instance;
     }
 
-    /**
-     * @param string $class
-     */
     protected function createInstance($class, $config = array())
     {
         $configuration = $this->config->get($class);
@@ -163,7 +160,7 @@ class Manager
 
     /**
      * @param mixed $object 
-     * @return Manager
+     * @return Cti\Di\Manager
      */
     public function register($object, $class = null)
     {

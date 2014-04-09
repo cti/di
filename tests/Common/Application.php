@@ -2,7 +2,7 @@
 
 namespace Common;
 
-use Nekufa\Di\Manager;
+use Cti\Di\Manager;
 
 class Application
 {

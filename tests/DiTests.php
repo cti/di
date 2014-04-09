@@ -1,7 +1,7 @@
 <?php
 
-use Nekufa\Di\Configuration;
-use Nekufa\Di\Manager;
+use Cti\Di\Configuration;
+use Cti\Di\Manager;
 
 class DiTests extends PHPUnit_Framework_TestCase
 {

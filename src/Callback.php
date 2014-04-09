@@ -1,10 +1,10 @@
 <?php
 
-namespace Nekufa\Di;
+namespace Cti\Di;
 
 /**
  * Class Callback
- * @package Nekufa\Di
+ * @package Cti\Di
  */
 class Callback
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Nekufa\Di;
+namespace Cti\Di;
 
 /**
  * Class Configuration
- * @package Nekufa\Di
+ * @package Cti\Di
  */
 class Configuration
 {
@@ -48,7 +48,7 @@ class Configuration
     /**
      * @param string $class
      * @param string $property
-     * @param string  $default
+     * @param mixed  $default
      * @return mixed
      */
     public function get($class, $property = null, $default = null) 
@@ -86,7 +86,7 @@ class Configuration
     /**
      * @param string $source
      * @param string $destination
-     * @return Configuration
+     * @return Cti\Di\Configuration
      */
     public function setAlias($source, $destination)
     {

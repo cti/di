@@ -1,33 +1,32 @@
 # Dependency Manager
 
-[![Latest Stable Version](https://poser.pugx.org/nekufa/di/v/stable.png)](https://packagist.org/packages/nekufa/di)
-[![Total Downloads](https://poser.pugx.org/nekufa/di/downloads.png)](https://packagist.org/packages/nekufa/di)
-[![License](https://poser.pugx.org/nekufa/di/license.png)](https://packagist.org/packages/nekufa/di)
-[![Build Status](https://travis-ci.org/nekufa/di.svg)](https://travis-ci.org/nekufa/di)
-[![Coverage Status](https://coveralls.io/repos/nekufa/di/badge.png)](https://coveralls.io/r/nekufa/di)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/0063d4ab-e812-43e4-a2a7-ebd40be77593/mini.png)](https://insight.sensiolabs.com/projects/0063d4ab-e812-43e4-a2a7-ebd40be77593)
+[![Latest Stable Version](https://poser.pugx.org/cti/di/v/stable.png)](https://packagist.org/packages/cti/di)
+[![Total Downloads](https://poser.pugx.org/cti/di/downloads.png)](https://packagist.org/packages/cti/di)
+[![License](https://poser.pugx.org/cti/di/license.png)](https://packagist.org/packages/cti/di)
+[![Build Status](https://travis-ci.org/cti/di.svg)](https://travis-ci.org/cti/di)
+[![Coverage Status](https://coveralls.io/repos/cti/di/badge.png)](https://coveralls.io/r/cti/di)
 
 This component implements dependency injection pattern.   
 Manager can inject properties, configure objects and resolve depenencies while calling methods.  
 
 # Installation
-Using composer.
+Usin composer.
 ```json
 {
     "require": {
-        "nekufa/di": "*"    
+        "Cti/di": "*"    
     }
 }
 ```
 
 # Object configuration
-Configuration param is optional, but it is very useful for instance configuration.
+Configuration param is optional, but it is very useful for configure instances.
 
 ```php
 <?php
 
-use Nekufa\Di\Configuration;
-use Nekufa\Di\Manager;
+use Cti\Di\Configuration;
+use Cti\Di\Manager;
 
 $configuration = new Configuration(array(
     'ClassName' => array(
@@ -42,12 +41,12 @@ $manager->create('ClassName')->property; // value
 
 ```
 
-You can merge configuration from different arrays and set properties directly.
+You can merge configuration from different files and set properties directly.
 
 ```php
 <?php
 
-use Nekufa\Di\Configuration;
+use Cti\Di\Configuration;
 
 $configuration = new Configuration();
 
@@ -57,7 +56,7 @@ $configuration->set('Database', 'hostname', '192.168.2.87');
 // override multiple properties
 $configuration->merge(array(
     'Database' => array(
-        'username' => 'nekufa',
+        'username' => 'Cti',
         'password' => 'secret',
         'hostname' => '192.168.2.91',
     )
@@ -76,7 +75,7 @@ You can inject your dependencies in costructor
 ```php
 <?php
 
-use Nekufa\Di\Manager;
+use Cti\Di\Manager;
 
 class Module
 {
@@ -96,8 +95,7 @@ class Application
 $manager = new Manager();
 
 // create Module, inject it in constructor and return application
-$application = $manager->get('Application');
-
+$manager->get('Application');
 ```
 
 # Object initialization
@@ -107,7 +105,7 @@ After your object were created, properties was set and all dependencies were inj
 ```php
 <?php
 
-use Nekufa\Di\Manager;
+use Cti\Di\Manager;
 
 class Module
 {
@@ -126,8 +124,8 @@ class Application
 
     function init()
     {
-        echo 'this.property = ' . $this->property . PHP_EOL;
-        echo 'this.module is instance of '. get_class($this->module);
+        echo '@value = ' . $this->property . PHP_EOL;
+        echo '@property is instance of '. get_class($this->module);
     }
 }
 
@@ -146,8 +144,8 @@ Injection works recursive, so if module requires another dependency - it would b
 ```php
 <?php
 
-use Nekufa\Di\Configuration;
-use Nekufa\Di\Manager;
+use Cti\Di\Configuration;
+use Cti\Di\Manager;
 
 class Application
 {
@@ -159,7 +157,7 @@ class Application
 
     public function init()
     {
-        echo "Application works with module state = " . $this->module->state;
+        echo "Application works with module.state = " . $this->module->state;
     }
 }
 
@@ -180,16 +178,16 @@ $manager->get('Application');
 ```
 
 # Method caller
-The killer feature is ability resolve dependencies for method calling.
+One of the killer feature is ability resolve dependencies for method calling.
 
 ```php
 <?php
 
-use Nekufa\Di\Manager;
+use Cti\Di\Manager;
 
 class Transport 
 {
-    function process($message) 
+    function send($message) 
     {
         // ...
     }
@@ -199,7 +197,7 @@ class Mailer
 {
     function send(Transport $transport, $message) 
     {
-        $transport->process($message);
+        $transport->send($message);
     }
 }
 
@@ -220,7 +218,7 @@ You can alias one class with another or use this technique to select interface i
 ```php
 <?php
 
-use Nekufa\Di\Manager;
+use Cti\Di\Manager;
 
 interface GatewayInterface {}
 
