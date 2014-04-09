@@ -132,6 +132,19 @@ class Manager
         $configuration = $this->config->get($class);
         $parameters = array_merge($configuration, $config);
 
+        if($this->enableServiceLookup && isset($this->instance['Cti\Di\Locator'])) {
+            $locator = $this->instance['Cti\Di\Locator'];
+            foreach($parameters as $k => $v) {
+                if(is_string($v) && $v[0] == '@') {
+                    if($v[1] == '@') {
+                        $parameters[$k] = substr($v, 1);
+                    } else {
+                        $parameters[$k] = $locator->get(substr($v, 1));
+                    }
+                }
+            }
+        }
+
         if(!class_exists($class)) {
             throw new Exception("Class $class not found!");
         }
