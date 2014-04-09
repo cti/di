@@ -1,4 +1,43 @@
-# Manager configuration
+# Manage by config file
+
+The easiest way is to use configuration file in php format.
+For example you have file `/path/to/config.php' wich is in your version control:
+
+```php
+<?php return array(
+    'ClassName' => array(
+        'property' => 'value',
+        'anotherProperty' => 'value',
+    ),
+
+    'Interface' => 'InterfaceImplementation'
+);
+```
+
+you can place another file '/path/to/local.config.php' and exclude it from version control.
+In this file you can ovveride some class properties:
+
+```php
+<?php return array(
+    'ClassName' => array(
+        'property' => 'new-value'
+    )
+);
+```
+
+Usage is pretty simple - use load method and Configuration will lookup "local.*"
+
+```php
+<?php
+
+use Cti\Di\Configuration;
+
+$configuration = new Configuration;
+$configuration->load('/path/to/config.php');
+
+```
+
+# Manage by hand
 
 Configuration object is optional, but it is very useful for configure instances.
 
@@ -21,7 +60,7 @@ $manager->create('ClassName')->property; // value
 
 ```
 
-You can merge configuration from different files and set properties directly.
+You can merge configuration from different arrays and set properties directly.
 
 ```php
 <?php

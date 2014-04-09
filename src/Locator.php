@@ -52,6 +52,12 @@ class Locator
 
         $configuration = isset($definition['configuration']) ? $definition['configuration'] : array();
 
+        foreach($configuration as $k => $v) {
+            if(is_string($v) && $v[0] == '@' && $v[1] != '@') {
+                $configuration[$k] = $this->get(substr($v,1));
+            }
+        }
+
         return $this->instances[$name] = $this->manager->create($definition['class'], $configuration);
     }
 

@@ -7,6 +7,8 @@ class Module
     public $state;
     public $new_state;
 
+    public $reference;
+
     public function getState() 
     {
         return $this->state;

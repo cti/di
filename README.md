@@ -20,7 +20,7 @@ Using composer.
 ```
 
 # Architecture
-* Configuration file used for manager
+* Configuration file is used for instance configuration throw manager
 * Manager creates instance injecting all dependencies
 * Service locator works on top level of manager and provides services
 

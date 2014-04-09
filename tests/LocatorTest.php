@@ -81,6 +81,11 @@ class LocatorTest extends PHPUnit_Framework_TestCase
             'base6' => array(
                 'class' => 'Common\Module', 
                 'state' => 'wtf'
+            ),
+
+            'base7' => array(
+                'class' => 'Common\Module',
+                'reference' => '@base6'
             )
         );
 
@@ -99,6 +104,8 @@ class LocatorTest extends PHPUnit_Framework_TestCase
         $this->assertSame($locator->get('base3x')->state, 'q');
         $this->assertSame($locator->get('base5')->state, 'hm');
         $this->assertSame($locator->get('base6')->state, 'wtf');
+
+        $this->assertSame($locator->get('base6'), $locator->get('base7')->reference);
 
         $app = new Common\Application;
         $locator->register('app', $app);
