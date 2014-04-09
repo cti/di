@@ -23,7 +23,7 @@ class Manager
      */
     protected $callback = array();
 
-    public $enableServiceLookup = true;
+    protected $enableServiceLookup = true;
 
     /**
      * @param Configuration $config
@@ -38,23 +38,21 @@ class Manager
     }
 
     /**
-     * enable locator service usage
+     * switch locator service integration
      * @return Cti\Di\Manager
      */
-    function enableServiceLookup()
+    function setServiceLookup($value)
     {
-        $this->enableServiceLookup = true;
+        $this->enableServiceLookup = $value;
         return $this;
     }
 
     /**
-     * disable locator service usage
-     * @return Cti\Di\Manager
+     * @return  boolean
      */
-    function disableServiceLookup()
+    function getServiceLookup()
     {
-        $this->enableServiceLookup = false;
-        return $this;
+        return $this->enableServiceLookup;
     }
 
     /**

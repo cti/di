@@ -109,13 +109,15 @@ class Locator
 
         $configuration = isset($definition['configuration']) ? $definition['configuration'] : array();
 
-        foreach($configuration as $k => $v) {
-            if(is_string($v) && $v[0] == '@' && $v[1] != '@') {
-                $configuration[$k] = $this->get(substr($v,1));
-            }
-        }
+        $manager = $this->get('manager');
 
-        return $this->instances[$name] = $this->get('manager')->create($definition['class'], $configuration);
+        $serviceLookup = $manager->getServiceLookup();
+
+        $manager->setServiceLookup(true);
+        $this->instances[$name] = $manager->create($definition['class'], $configuration);
+        $manager->setServiceLookup($serviceLookup);
+        
+        return $this->instances[$name];
     }
 
     function register($name, $config)
