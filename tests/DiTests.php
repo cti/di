@@ -5,6 +5,24 @@ use Cti\Di\Manager;
 
 class DiTests extends PHPUnit_Framework_TestCase
 {
+    public function testPropertiesConfiguration()
+    {
+        $manager = new Manager;
+        $manager->setConfigureAllProperties(true);
+
+        $module = $manager->create('Common\Module', array(
+            '_state' => '_state'
+        ));
+        $this->assertSame($module->getProtectedState(), '_state');
+
+        $manager->setConfigureAllProperties(false);
+
+        $module = $manager->create('Common\Module', array(
+            '_state' => '_state'
+        ));
+        $this->assertSame($module->getProtectedState(), null);
+    }
+
     public function testFilesystemLoader()
     {
         $configuration = new Configuration();
@@ -21,7 +39,7 @@ class DiTests extends PHPUnit_Framework_TestCase
 
     }
 
-    function testFailParsing()
+    public function testFailParsing()
     {
         $this->setExpectedException('Exception');
         $locator = new Configuration;

@@ -190,8 +190,15 @@ class Manager
 
         foreach ($parameters as $k => $v) {
             if (property_exists($class, $k)) {
-                if ($this->configureAllProperties || Reflection::getReflectionProperty($class, $k)->isPublic()) {
-                    $instance->$k = $v;
+                $reflection = Reflection::getReflectionProperty($class, $k);
+                if ($this->configureAllProperties || $reflection->isPublic()) {
+                    if(!$reflection->isPublic()) {
+                        $reflection->setAccessible(true);
+                    }
+                    $reflection->setValue($instance, $v);
+                    if(!$reflection->isPublic()) {
+                        $reflection->setAccessible(false);
+                    }
                 }
             }
         }
