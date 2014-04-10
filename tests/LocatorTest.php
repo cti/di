@@ -27,6 +27,7 @@ class LocatorTest extends PHPUnit_Framework_TestCase
         // escape string with @
         $locator->getManager()->getConfiguration()->set('Common\Module', 'state', '@@test');
         $this->assertSame($locator->getManager()->create('Common\Module')->state, '@test');
+
     }
 
     function testClassLookup()
@@ -157,6 +158,8 @@ class LocatorTest extends PHPUnit_Framework_TestCase
         $locator->register('application.module', $locator->get('base'));
         $this->assertSame($locator->getApplicationModule(), $locator->get('base'));
 
+        // check execute
+        $this->assertSame($locator->call('base2', 'getState'), 'zzzz');
 
         $this->setExpectedException('Exception');
         $locator->get('no-base');

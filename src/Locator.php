@@ -181,4 +181,10 @@ class Locator
             
         }
     }
+
+    public function call($service, $method, $arguments = array())
+    {
+        return $this->get('manager')->call($this->get($service), $method, $arguments);
+    }
+
 }
