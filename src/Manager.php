@@ -23,7 +23,17 @@ class Manager
      */
     protected $callback = array();
 
+    /**
+     * service lookup flag
+     * @var float
+     */
     protected $enableServiceLookup = true;
+
+    /**
+     * configure all properties
+     * @var float
+     */
+    protected $configureAllProperties = true;
 
     /**
      * @param Configuration $config
@@ -39,6 +49,7 @@ class Manager
 
     /**
      * switch locator service integration
+     * @param boolean $flag
      * @return Cti\Di\Manager
      */
     function setServiceLookup($value)
@@ -53,6 +64,24 @@ class Manager
     function getServiceLookup()
     {
         return $this->enableServiceLookup;
+    }
+    
+    /**
+     * switch configure properties flah
+     * @param boolean $flag
+     * @return Cti\Di\Manager
+     */
+    function setConfigureAllProperties($value) 
+    {
+        $this->configureAllProperties = $value;
+    }
+    
+    /**
+     * @return  boolean
+     */
+    function getConfigureAllProperties()
+    {
+        return $this->configureAllProperties;
     }
 
     /**
@@ -161,7 +190,7 @@ class Manager
 
         foreach ($parameters as $k => $v) {
             if (property_exists($class, $k)) {
-                if (Reflection::getReflectionProperty($class, $k)->isPublic()) {
+                if ($this->configureAllProperties || Reflection::getReflectionProperty($class, $k)->isPublic()) {
                     $instance->$k = $v;
                 }
             }
