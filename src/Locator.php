@@ -104,7 +104,7 @@ class Locator
         $definition = $this->definition[$name];
 
         if(isset($definition['callback'])) {
-            return $this->instances[$name] = call_user_func($definition['callback']);
+            return $this->instances[$name] = call_user_func($definition['callback'], $this);
         }
 
         $configuration = isset($definition['configuration']) ? $definition['configuration'] : array();
