@@ -87,6 +87,8 @@ class Configuration
             $local = dirname($config) . DIRECTORY_SEPARATOR . 'local.' . basename($config);
             if(file_exists($local)) {
                 $this->merge(include $local);
+            } else {
+                file_put_contents($local, '<?php'.PHP_EOL.'return array();');
             }
 
             return true;

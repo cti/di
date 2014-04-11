@@ -220,4 +220,19 @@ class DiTests extends PHPUnit_Framework_TestCase
         $m = new Manager;
         $m->get('');
     }
+
+    public function testCreateLocalConfiguration()
+    {
+        $file = implode(DIRECTORY_SEPARATOR, array(__DIR__, 'resources', 'configuration.php'));
+        $local = implode(DIRECTORY_SEPARATOR, array(__DIR__, 'resources', 'local.configuration.php'));
+
+        $configuration = new Configuration();
+        file_put_contents($file, '<?php' . PHP_EOL . 'return array();');
+        if(file_exists($local)) {
+            unlink($local);
+        }
+        $configuration->load($file);
+        $this->assertTrue(file_exists($local));
+        unlink($local);
+    }
 }
