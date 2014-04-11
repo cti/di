@@ -16,6 +16,14 @@ class Locator
     protected $methods = array();
     protected $classes = array();
 
+    function init(Manager $manager)
+    {
+        if(isset($this->instances['manager'])) {
+            throw new Exception("Manager is already registered!");
+        }
+        $this->instances['manager'] = $manager;
+    }
+
     function load($config)
     {
         if(is_array($config)) {

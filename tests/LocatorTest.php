@@ -1,5 +1,6 @@
 <?php
 
+use Cti\Di\Manager;
 use Cti\Di\Locator;
 
 class LocatorTest extends PHPUnit_Framework_TestCase
@@ -41,6 +42,12 @@ class LocatorTest extends PHPUnit_Framework_TestCase
     {
         $locator = new Locator;
         $this->assertSame($locator, $locator->getManager()->get('Cti\Di\Locator'));
+    }
+
+    function testManagerRegistration()
+    {
+        $manager = new Manager;
+        $this->assertSame($manager, $manager->get('Cti\Di\Locator')->getManager());
     }
 
     function testFailRegistration()
