@@ -88,7 +88,7 @@ class Configuration
             if(file_exists($local)) {
                 $this->merge(include $local);
             } else {
-                file_put_contents($local, '<?php'.PHP_EOL.'return array();');
+                file_put_contents($local, '<?php' . PHP_EOL . PHP_EOL . 'return array(' . PHP_EOL . ');');
             }
 
             return true;
