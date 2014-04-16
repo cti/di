@@ -5,6 +5,15 @@ use Cti\Di\Locator;
 
 class LocatorTest extends PHPUnit_Framework_TestCase
 {
+    function testLocatorManagerLink()
+    {
+        $this->setExpectedException('Exception');
+
+        $l = new Locator;
+
+        $l->init(new Manager);
+        $l->init(new Manager);
+    }
 
     function testLocatorManagerWorkflow()
     {

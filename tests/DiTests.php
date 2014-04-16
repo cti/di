@@ -15,7 +15,11 @@ class DiTests extends PHPUnit_Framework_TestCase
         ));
         $this->assertSame($module->getProtectedState(), '_state');
 
+        $manager->setConfigureAllProperties(true);
+        $this->assertTrue($manager->getConfigureAllProperties());
+
         $manager->setConfigureAllProperties(false);
+        $this->assertFalse($manager->getConfigureAllProperties());        
 
         $module = $manager->create('Common\Module', array(
             '_state' => '_state'
