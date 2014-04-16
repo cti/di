@@ -64,9 +64,9 @@ class Configuration
      * @param string $class
      * @param string $property
      * @param mixed  $default
-     * @return mixed
+     * @return null
      */
-    public function push($class, $property, $value)
+    public function push($class, $property, $value, $key = null)
     {
         if(!isset($this->data[$class])) {
             $this->data[$class] = array();
@@ -80,7 +80,15 @@ class Configuration
             throw new Exception(sprintf("Can't push to %s property", gettype($this->data[$class][$property])));
         }
 
-        $this->data[$class][$property][] = $value;
+        if(!$key) {
+            $this->data[$class][$property][] = $value;
+
+        } else {
+            if(isset($this->data[$class][$property][$key])) {
+                throw new Exception(sprintf("Key %s of property %s was already set", $key, $property));
+            }
+            $this->data[$class][$property][$key] = $value;
+        }
     }
 
     /**

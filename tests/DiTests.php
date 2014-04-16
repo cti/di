@@ -106,6 +106,15 @@ class DiTests extends PHPUnit_Framework_TestCase
         $configuration->push('class', 'scalar', 'string');
     }
 
+    public function testPushKey()
+    {
+        $configuration = new Configuration;
+        $configuration->push('class', 'property', 'value', 'index');
+
+        $this->setExpectedException('Exception');
+        $configuration->push('class', 'property', 'value2', 'index');
+    }
+
     public function testPropertyInjection() 
     {
         $m = new Manager;
