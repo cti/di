@@ -97,11 +97,15 @@ class Configuration
     public function merge($data)
     {
         foreach($data as $class => $config) {
-            if(!isset($this->data[$class])) {
-                $this->data[$class] = $config;
+            if(is_string($config)) {
+                $this->alias[$class] = $config;
             } else {
-                foreach($config as $k => $v) {
-                    $this->data[$class][$k] = $v;
+                if(!isset($this->data[$class])) {
+                    $this->data[$class] = $config;
+                } else {
+                    foreach($config as $k => $v) {
+                        $this->data[$class][$k] = $v;
+                    }
                 }
             }
         }
