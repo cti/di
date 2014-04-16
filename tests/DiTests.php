@@ -95,6 +95,15 @@ class DiTests extends PHPUnit_Framework_TestCase
             )
         ));
         $this->assertSame($configuration->get('Common\ClassWithConstructor', 'property'), 'piu-piu');
+
+        // push tests
+        $configuration->push('class', 'property', 'item');
+        $configuration->push('class', 'property', 'item2');
+
+        // test scalar push
+        $this->setExpectedException('Exception');
+        $configuration->set('class', 'scalar', 'string');
+        $configuration->push('class', 'scalar', 'string');
     }
 
     public function testPropertyInjection() 

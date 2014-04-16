@@ -60,6 +60,30 @@ class Configuration
     }
 
     /**
+     * append value to an array
+     * @param string $class
+     * @param string $property
+     * @param mixed  $default
+     * @return mixed
+     */
+    public function push($class, $property, $value)
+    {
+        if(!isset($this->data[$class])) {
+            $this->data[$class] = array();
+        }
+
+        if(!isset($this->data[$class][$property])) {
+            $this->data[$class][$property] = array();
+        } 
+
+        if(!is_array($this->data[$class][$property])) {
+            throw new Exception(sprintf("Can't push to %s property", gettype($this->data[$class][$property])));
+        }
+
+        $this->data[$class][$property][] = $value;
+    }
+
+    /**
      * @param array $data
      */
     public function merge($data)
