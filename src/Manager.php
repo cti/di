@@ -128,7 +128,14 @@ class Manager
             $this->instance[$class] = $instance ? $instance : $this->createInstance($class);
 
             if (!$instance && method_exists($class, 'init')) {
+                $reflection = Reflection::getReflectionMethod($class, 'init');
+                if($reflection->isProtected()) {
+                    $reflection->setAccessible(true);
+                }
                 $this->call($this->instance[$class], 'init');
+                if($reflection->isProtected()) {
+                    $reflection->setAccessible(false);
+                }
             }
         }
         return $this->instance[$class];

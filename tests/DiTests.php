@@ -5,6 +5,12 @@ use Cti\Di\Manager;
 
 class DiTests extends PHPUnit_Framework_TestCase
 {
+    public function testProtectedInit()
+    {
+        $manager = new Manager;
+        $instance = $manager->get('Common\ProtectedInit');
+        $this->assertTrue($instance->inited);
+    }
     public function testPropertiesConfiguration()
     {
         $manager = new Manager;
