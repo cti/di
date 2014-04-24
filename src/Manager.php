@@ -217,7 +217,8 @@ class Manager
             }
         }
 
-        foreach(Reflection::getReflectionClass($class)->getProperties() as $property) {
+        $reflectionClass = Reflection::getReflectionClass($class);
+        foreach($reflectionClass->getProperties() as $property) {
             if(stristr($property->getDocComment(), '@inject')) {
                 foreach(explode("\n", $property->getDocComment()) as $line) {
                     if(stristr($line, '@var')) {
@@ -228,6 +229,24 @@ class Manager
                                     $item = substr($item, 1);
                                 }
                                 $injected_class = trim(str_replace("\r", '', $item));
+
+                                if($injected_class[0] != '\\') {
+                                    /**
+                                     * @var Parser $parser
+                                     */
+                                    $parser = $this->get('Cti\Di\Parser');
+                                    $aliases = $parser->getUsage($reflectionClass);
+                                    if(isset($aliases[$injected_class])) {
+                                        // imported with use statement
+                                        $injected_class = $aliases[$injected_class];
+                                    } else {
+
+                                        if(!strpos($injected_class, '\\')) {
+                                            $injected_class = $reflectionClass->getNamespaceName() . '\\' . $injected_class;
+                                        }
+                                    }
+
+                                }
                                 break;
                             }
                         }

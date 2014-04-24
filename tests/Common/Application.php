@@ -8,7 +8,7 @@ class Application
 {
     /**
      * @inject
-     * @var Common\Module
+     * @var Module
      */
     protected $module;
 
