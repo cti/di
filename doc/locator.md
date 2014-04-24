@@ -39,3 +39,20 @@ $config = array(
 $locator = new Locator();
 $locator->load($config);
 ```
+
+# Service usage
+After configure locator you can access services.
+
+```php
+<?php
+
+// instance of ServiceClass
+$locator->get('service1');
+
+// use magic getter via callback defined service 3
+$locator->getService2();
+
+// use virtual property;
+$locator->service3;
+
+```
