@@ -111,6 +111,12 @@ class Configuration
         }
     }
 
+    /**
+     * load configuration
+     * @param string|array $config
+     * @return bool
+     * @throws Exception
+     */
     public function load($config)
     {
         if(is_array($config)) {
@@ -130,7 +136,7 @@ class Configuration
             return true;
         }
 
-        throw new Exception(sprintf("Error processing application configuration: %s", $params['config']));
+        throw new Exception(sprintf("Error processing application configuration type: %s", gettype($config)));
     }
 
     /**
@@ -144,7 +150,7 @@ class Configuration
     /**
      * @param string $source
      * @param string $destination
-     * @return Cti\Di\Configuration
+     * @return \Cti\Di\Configuration
      */
     public function setAlias($source, $destination)
     {

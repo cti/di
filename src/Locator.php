@@ -2,10 +2,22 @@
 
 namespace Cti\Di;
 
+/**
+ * Class Locator
+ * @package Cti\Di
+ */
 class Locator
 {
+    /**
+     * service instances
+     * @var array
+     */
     protected $instances = array();
 
+    /**
+     * service configuration
+     * @var array
+     */
     protected $definition = array(
         'manager' => array(
             'class' => 'Cti\Di\Manager',
@@ -13,9 +25,23 @@ class Locator
         )
     );
 
+    /**
+     * service getters hash
+     * @var array
+     */
     protected $methods = array();
+
+    /**
+     * service class hash
+     * @var array
+     */
     protected $classes = array();
 
+    /**
+     * initialize locator
+     * @param Manager $manager
+     * @throws Exception
+     */
     function init(Manager $manager)
     {
         if(isset($this->instances['manager'])) {
@@ -24,6 +50,11 @@ class Locator
         $this->instances['manager'] = $manager;
     }
 
+    /**
+     * load configuration
+     * @param $config
+     * @throws Exception
+     */
     function load($config)
     {
         if(is_array($config)) {
@@ -36,6 +67,10 @@ class Locator
         $this->parse($data);
     }
 
+    /**
+     * parse array configuration
+     * @param $data
+     */
     function parse($data)
     {
         foreach($data as $service => $configuration) {
@@ -43,7 +78,14 @@ class Locator
         }
     }
 
-    function __call($method, $aguments)
+    /**
+     * magic getter
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     * @throws Exception
+     */
+    function __call($method, $arguments)
     {
         if(!isset($this->methods[$method])) {
             foreach (array_keys($this->definition) as $service) {
@@ -57,6 +99,11 @@ class Locator
         return $this->get($this->methods[$method]);
     }
 
+    /**
+     * format service name
+     * @param $string
+     * @return string
+     */
     function camelCaseServiceName($string)
     {
         foreach(array('.', '_', '-') as $delimiter) {
@@ -67,6 +114,11 @@ class Locator
         return ucfirst($string);
     }
 
+    /**
+     * find service by class
+     * @param $class
+     * @return mixed|null
+     */
     function findByClass($class)
     {
         if(!isset($this->classes[$class])) {
@@ -93,6 +145,12 @@ class Locator
         return null;
     }
 
+    /**
+     * get service
+     * @param $name
+     * @return mixed
+     * @throws Exception
+     */
     function get($name)
     {
         if(isset($this->instances[$name])) {
@@ -128,6 +186,12 @@ class Locator
         return $this->instances[$name];
     }
 
+    /**
+     * register new service
+     * @param $name
+     * @param $config
+     * @throws Exception
+     */
     function register($name, $config)
     {
         $this->classes = array();
@@ -190,6 +254,13 @@ class Locator
         }
     }
 
+    /**
+     * call service method with given arguments
+     * @param $service
+     * @param $method
+     * @param array $arguments
+     * @return mixed
+     */
     public function call($service, $method, $arguments = array())
     {
         return $this->get('manager')->call($this->get($service), $method, $arguments);

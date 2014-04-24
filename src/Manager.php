@@ -9,7 +9,7 @@ namespace Cti\Di;
 class Manager
 {
     /**
-     * @var Cti\Di\Configuration
+     * @var \Cti\Di\Configuration
      */
     protected $config;
 
@@ -36,7 +36,7 @@ class Manager
     protected $configureAllProperties = true;
 
     /**
-     * @param Configuration $config
+     * @param Configuration|null $config
      */
     public function __construct(Configuration $config = null)
     {
@@ -50,7 +50,7 @@ class Manager
     /**
      * switch locator service integration
      * @param boolean $flag
-     * @return Cti\Di\Manager
+     * @return \Cti\Di\Manager
      */
     function setServiceLookup($value)
     {
@@ -69,7 +69,7 @@ class Manager
     /**
      * switch configure properties flah
      * @param boolean $flag
-     * @return Cti\Di\Manager
+     * @return \Cti\Di\Manager
      */
     function setConfigureAllProperties($value) 
     {
@@ -85,7 +85,7 @@ class Manager
     }
 
     /**
-     * @return Cti\Di\Configuration
+     * @return \Cti\Di\Configuration
      */
     public function getConfiguration()
     {
@@ -95,7 +95,7 @@ class Manager
     /**
      * @param string $source
      * @param string $destination
-     * @return Cti\Di\Manager
+     * @return \Cti\Di\Manager
      */
     public function setAlias($source, $destination)
     {
@@ -161,6 +161,13 @@ class Manager
         return $instance;
     }
 
+    /**
+     * create instance with given configuration
+     * @param string $class
+     * @param array $config
+     * @return mixed
+     * @throws Exception
+     */
     protected function createInstance($class, $config = array())
     {
         $configuration = $this->config->get($class);
@@ -244,7 +251,7 @@ class Manager
 
     /**
      * @param mixed $object 
-     * @return Cti\Di\Manager
+     * @return \Cti\Di\Manager
      */
     public function register($object, $class = null)
     {
