@@ -5,6 +5,10 @@ namespace Cti\Di;
 use ReflectionClass;
 use SplObjectStorage;
 
+/**
+ * Class Parser
+ * @package Cti\Di
+ */
 class Parser
 {
     /**
@@ -12,12 +16,19 @@ class Parser
      */
     protected $cache;
 
+    /**
+     * initialize cache property
+     */
     function __construct()
     {
         $this->cache = new SplObjectStorage();
-
     }
 
+    /**
+     * get usage hash
+     * @param ReflectionClass $class
+     * @return mixed
+     */
     function getUsage(ReflectionClass $class)
     {
         if(!isset($this->cache[$class])) {
