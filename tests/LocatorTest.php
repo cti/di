@@ -174,6 +174,13 @@ class LocatorTest extends PHPUnit_Framework_TestCase
         $locator->register('application.module', $locator->get('base'));
         $this->assertSame($locator->getApplicationModule(), $locator->get('base'));
 
+        // property access
+        $this->assertSame($locator->base, $locator->getBase());
+
+        // property registration
+        $locator->base8 = 'Common\Module';
+        $this->assertInstanceOf('Common\Module', $locator->base8);
+
         // check execute
         $this->assertSame($locator->call('base2', 'getState'), 'zzzz');
 

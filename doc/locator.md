@@ -38,6 +38,13 @@ $config = array(
 
 $locator = new Locator();
 $locator->load($config);
+
+// register in runtime
+$locator->register('service5', 'AnotherService');
+
+// register with magic method
+$locator->service6 = 'MyClass';
+
 ```
 
 # Service usage

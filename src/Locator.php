@@ -100,6 +100,23 @@ class Locator
     }
 
     /**
+     * magic getter
+     * @param $name
+     * @return mixed
+     * @throws Exception
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    public function __set($name, $config)
+    {
+        $this->register($name, $config);
+    }
+
+
+    /**
      * format service name
      * @param $string
      * @return string
