@@ -12,6 +12,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $manager->get('Inject\FullClassName');
         $manager->get('Inject\ShortClassName');
         $manager->get('Inject\ByNamespace');
+        $manager->call('Common\Application', 'extractModuleFromManager');
         $parsingTime = microtime(1) - $startTime;
 
         $data = $manager->get('Cti\Di\Cache')->getData();
@@ -22,6 +23,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $manager->get('Inject\FullClassName');
         $manager->get('Inject\ShortClassName');
         $manager->get('Inject\ByNamespace');
+        $manager->call('Common\Application', 'extractModuleFromManager');
         $cachedTime = microtime(1) - $startTime;
 
         $this->assertGreaterThan($cachedTime, $parsingTime);
