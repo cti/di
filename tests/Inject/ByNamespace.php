@@ -7,7 +7,7 @@ use Inject\FakeNamespace;
 class ByNamespace {
     /**
      * @inject
-     * @var FakeNamespace\FakeClass;
+     * @var FakeNamespace\FakeClass
      */
     public $fakeClass;
 } 

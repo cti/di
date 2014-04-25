@@ -61,6 +61,24 @@ class Inspector
         return $map;
     }
 
+    /**
+     * @param $class
+     * @return array
+     */
+    public function getPublicMethods($class)
+    {
+        $result = array();
+        foreach(Reflection::getReflectionClass($class)->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            $result[] = $method->getName();
+        }
+        return $result;
+    }
+
+
+    /**
+     * @param $class
+     * @return array
+     */
     public function getClassInjection($class)
     {
         $injection = array();
@@ -93,7 +111,7 @@ class Inspector
                                             $alias = $chain[3];
                                         } else {
                                             $destination = $chain[1];
-                                            $alias = Reflection::getReflectionClass($chain[1])->getShortName();
+                                            list($alias) = array_reverse(explode("\\", $chain[1]));
                                         }
                                         $aliases[$alias] = $destination;
                                     }
@@ -105,9 +123,13 @@ class Inspector
                                     // imported with use statement
                                     $injected_class = $aliases[$injected_class];
 
-                                } else {
-                                    // from class namespace
+                                } elseif(!strstr($injected_class, '\\')) {
                                     $injected_class = $reflectionClass->getNamespaceName() . '\\' . $injected_class;
+                                } else {
+                                    list($ns) = explode('\\', $injected_class);
+                                    if(isset($aliases[$ns])) {
+                                        $injected_class = $aliases[$ns] . substr($injected_class, strlen($ns));
+                                    }
                                 }
 
                             }

@@ -31,7 +31,6 @@ class InjectTest extends \PHPUnit_Framework_TestCase
 
     public function testByNamespace()
     {
-        $this->markTestSkipped();
         $container = $this->getManager()->get('Inject\ByNamespace');
         $this->assertNotEmpty($container->fakeClass);
         $this->assertTrue($container->fakeClass->initialized);

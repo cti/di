@@ -84,6 +84,10 @@ class Callback
             return Reflection::getReflectionClass($this->class)->newInstanceArgs($arguments);
         }
 
+        if(in_array($this->method, $manager->getInspector()->getPublicMethods($this->class))) {
+            return call_user_func_array(array($instance, $this->method), $arguments);
+        }
+
         return Reflection::getReflectionMethod($this->class, $this->method)->invokeArgs($instance, $arguments);
     }
 }

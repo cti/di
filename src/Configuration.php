@@ -150,7 +150,7 @@ class Configuration
     /**
      * @param string $source
      * @param string $destination
-     * @return \Cti\Di\Configuration
+     * @return Configuration
      */
     public function setAlias($source, $destination)
     {

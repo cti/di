@@ -9,7 +9,7 @@ namespace Cti\Di;
 class Manager
 {
     /**
-     * @var \Cti\Di\Configuration
+     * @var Configuration
      */
     protected $config;
 
@@ -50,7 +50,7 @@ class Manager
     /**
      * switch locator service integration
      * @param boolean $flag
-     * @return \Cti\Di\Manager
+     * @return Manager
      */
     function setServiceLookup($value)
     {
@@ -69,7 +69,7 @@ class Manager
     /**
      * switch configure properties flah
      * @param boolean $flag
-     * @return \Cti\Di\Manager
+     * @return Manager
      */
     function setConfigureAllProperties($value) 
     {
@@ -85,7 +85,7 @@ class Manager
     }
 
     /**
-     * @return \Cti\Di\Configuration
+     * @return Configuration
      */
     public function getConfiguration()
     {
@@ -95,7 +95,7 @@ class Manager
     /**
      * @param string $source
      * @param string $destination
-     * @return \Cti\Di\Manager
+     * @return Manager
      */
     public function setAlias($source, $destination)
     {
@@ -128,12 +128,13 @@ class Manager
             $this->instance[$class] = $instance ? $instance : $this->createInstance($class);
 
             if (!$instance && method_exists($class, 'init')) {
-                $reflection = Reflection::getReflectionMethod($class, 'init');
-                if($reflection->isProtected()) {
+                if(in_array('init', $this->getInspector()->getPublicMethods($class))) {
+                    $this->call($this->instance[$class], 'init');
+
+                } else {
+                    $reflection = Reflection::getReflectionMethod($class, 'init');
                     $reflection->setAccessible(true);
-                }
-                $this->call($this->instance[$class], 'init');
-                if($reflection->isProtected()) {
+                    $this->call($this->instance[$class], 'init');
                     $reflection->setAccessible(false);
                 }
             }
@@ -204,7 +205,7 @@ class Manager
 
         if($class != 'Cti\Di\Inspector') {
 
-            $inspector = $this->get('Cti\Di\Inspector');
+            $inspector = $this->getInspector();
 
             // injection contains class injection
             $injection = array();
@@ -241,7 +242,7 @@ class Manager
 
     /**
      * @param mixed $object 
-     * @return \Cti\Di\Manager
+     * @return Manager
      */
     public function register($object, $class = null)
     {
@@ -293,5 +294,13 @@ class Manager
             $this->callback[$key] = new Callback($this, $class, $method);
         }
         return $this->callback[$key];
+    }
+
+    /**
+     * @return Inspector
+     */
+    public function getInspector()
+    {
+        return $this->get('Cti\Di\Inspector');
     }
 }

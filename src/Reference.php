@@ -31,7 +31,7 @@ class Reference
     }
 
     /**
-     * @param \Cti\Di\Manager $manager
+     * @param Manager $manager
      * @return object
      */
     function getInstance(Manager $manager)
