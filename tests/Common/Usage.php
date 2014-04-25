@@ -18,4 +18,10 @@ class Usage
      * @var Config
      */
     public $config;
+
+    /**
+     * @inject
+     * @var \Cti\Di\Manager
+     */
+    public $globalManager;
 }

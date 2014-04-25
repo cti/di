@@ -27,5 +27,6 @@ class UsageTests extends PHPUnit_Framework_TestCase
         $usage = $manager->create('Common\Usage');
         $this->assertSame($usage->manager, $manager);
         $this->assertSame($usage->config, $manager->getConfiguration());
+        $this->assertSame($usage->globalManager, $manager);
     }
 }

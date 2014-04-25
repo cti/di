@@ -225,12 +225,14 @@ class Manager
 
                         foreach(explode(' ', substr($line, stripos($line, '@var') + 4)) as $item) {
                             if(strlen($item) > 0) {
+                                $global = false;
                                 if($item[0] == '\\') {
+                                    $global = true;
                                     $item = substr($item, 1);
                                 }
                                 $injected_class = trim(str_replace("\r", '', $item));
 
-                                if($injected_class[0] != '\\') {
+                                if(!$global) {
                                     /**
                                      * @var Parser $parser
                                      */
@@ -239,11 +241,10 @@ class Manager
                                     if(isset($aliases[$injected_class])) {
                                         // imported with use statement
                                         $injected_class = $aliases[$injected_class];
+                                        
                                     } else {
-
-                                        if(!strpos($injected_class, '\\')) {
-                                            $injected_class = $reflectionClass->getNamespaceName() . '\\' . $injected_class;
-                                        }
+                                        // from class namespace
+                                        $injected_class = $reflectionClass->getNamespaceName() . '\\' . $injected_class;
                                     }
 
                                 }
