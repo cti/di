@@ -8,18 +8,6 @@ class UsageTests extends PHPUnit_Framework_TestCase
 {
     function testUsing()
     {
-        $parser = new Parser();
-
-        $usage = $parser->getUsage(Reflection::getReflectionClass('Common\Usage'));
-
-        $this->assertArrayHasKey('Manager', $usage);
-        $this->assertArrayHasKey('Config', $usage);
-
-        $this->assertSame($usage, array(
-            'Manager' => 'Cti\Di\Manager',
-            'Config' => 'Cti\Di\Configuration',
-        ));
-
         $manager = new Manager();
         /**
          * @var \Common\Usage $usage

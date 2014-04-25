@@ -175,12 +175,12 @@ class Manager
 
         if($this->enableServiceLookup && isset($this->instance['Cti\Di\Locator'])) {
             $locator = $this->instance['Cti\Di\Locator'];
-            foreach($parameters as $k => $v) {
-                if(is_string($v) && $v[0] == '@') {
-                    if($v[1] == '@') {
-                        $parameters[$k] = substr($v, 1);
+            foreach($parameters as $name => $value) {
+                if(is_string($value) && $value[0] == '@') {
+                    if($value[1] == '@') {
+                        $parameters[$name] = substr($value, 1);
                     } else {
-                        $parameters[$k] = $locator->get(substr($v, 1));
+                        $parameters[$name] = $locator->get(substr($value, 1));
                     }
                 }
             }
@@ -202,66 +202,36 @@ class Manager
             $instance = $callback->launch(null, $parameters, $this);
         }
 
-        foreach ($parameters as $k => $v) {
-            if (property_exists($class, $k)) {
-                $reflection = Reflection::getReflectionProperty($class, $k);
-                if ($this->configureAllProperties || $reflection->isPublic()) {
-                    if(!$reflection->isPublic()) {
-                        $reflection->setAccessible(true);
-                    }
-                    $reflection->setValue($instance, $v);
-                    if(!$reflection->isPublic()) {
-                        $reflection->setAccessible(false);
-                    }
+        if($class != 'Cti\Di\Inspector') {
+
+            $inspector = $this->get('Cti\Di\Inspector');
+
+            // injection contains class injection
+            $injection = array();
+            foreach($inspector->getClassInjection($class) as $name => $value) {
+                $injection[$name] = $this->get($value);
+            }
+
+            $properties = $inspector->getClassProperties($class);
+            foreach ($parameters as $name => $value) {
+                if(isset($properties[$name])) {
+                    $injection[$name] = $value;
                 }
             }
-        }
 
-        $reflectionClass = Reflection::getReflectionClass($class);
-        foreach($reflectionClass->getProperties() as $property) {
-            if(stristr($property->getDocComment(), '@inject')) {
-                foreach(explode("\n", $property->getDocComment()) as $line) {
-                    if(stristr($line, '@var')) {
-
-                        foreach(explode(' ', substr($line, stripos($line, '@var') + 4)) as $item) {
-                            if(strlen($item) > 0) {
-                                $global = false;
-                                if($item[0] == '\\') {
-                                    $global = true;
-                                    $item = substr($item, 1);
-                                }
-                                $injected_class = trim(str_replace("\r", '', $item));
-
-                                if(!$global) {
-                                    /**
-                                     * @var Parser $parser
-                                     */
-                                    $parser = $this->get('Cti\Di\Parser');
-                                    $aliases = $parser->getUsage($reflectionClass);
-                                    if(isset($aliases[$injected_class])) {
-                                        // imported with use statement
-                                        $injected_class = $aliases[$injected_class];
-                                        
-                                    } else {
-                                        // from class namespace
-                                        $injected_class = $reflectionClass->getNamespaceName() . '\\' . $injected_class;
-                                    }
-
-                                }
-                                break;
-                            }
-                        }
-                    }
+            foreach($injection as $name => $value) {
+                // public property
+                if($properties[$name]) {
+                    $instance->$name = $value;
+                    continue;
                 }
 
-                if(!$property->isPublic()) {
-                    $property->setAccessible(true);
-                }
-
-                $property->setValue($instance, $this->get($injected_class));
-
-                if(!$property->isPublic()) {
-                    $property->setAccessible(false);
+                // protected property
+                if($this->configureAllProperties) {
+                    $reflection = Reflection::getReflectionProperty($class, $name);
+                    $reflection->setAccessible(true);
+                    $reflection->setValue($instance, $value);
+                    $reflection->setAccessible(false);
                 }
             }
         }
@@ -320,7 +290,7 @@ class Manager
     {
         $key = $class . '.' . $method;
         if (!isset($this->callback[$key])) {
-            $this->callback[$key] = new Callback($class, $method);
+            $this->callback[$key] = new Callback($this, $class, $method);
         }
         return $this->callback[$key];
     }

@@ -33,23 +33,15 @@ class Callback
      * @param string $class
      * @param string $method
      */
-    function __construct($class, $method)
+    function __construct(Manager $manager, $class, $method)
     {
         $this->class = $class;
         $this->method = $method;
 
-        $reflection = Reflection::getReflectionMethod($class, $method);
-        foreach ($reflection->getParameters() as $parameter) {
-            if (!$parameter->isDefaultValueAvailable()) {
-                $this->requiredCount++;
-            }
-            if ($parameter->getClass()) {
-                $this->arguments[] = new Reference($parameter->getClass()->getName());
+        $inspector = $manager->get('Cti\Di\Inspector');
 
-            } else {
-                $this->arguments[] = $parameter->getName();
-            }
-        }
+        $this->arguments = $inspector->getMethodArguments($class, $method);
+        $this->requiredCount = $inspector->getMethodRequiredCount($class, $method);
     }
 
     /**
@@ -86,6 +78,9 @@ class Callback
             }
         }
         if ($this->method == '__construct') {
+            if(!count($arguments)) {
+                return new $this->class;
+            }
             return Reflection::getReflectionClass($this->class)->newInstanceArgs($arguments);
         }
 
