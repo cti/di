@@ -45,6 +45,7 @@ class Manager
         }
         $this->register($this);
         $this->register($this->config = $config);
+        $this->register(new Cache);
     }
 
     /**
@@ -203,8 +204,10 @@ class Manager
             $instance = $callback->launch(null, $parameters, $this);
         }
 
-        if($class != 'Cti\Di\Inspector') {
+        if($class == 'Cti\Di\Inspector') { 
+            $instance->cache = $this->get('Cti\Di\Cache');
 
+        } else {
             $inspector = $this->getInspector();
 
             // injection contains class injection

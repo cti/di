@@ -8,6 +8,11 @@ namespace Cti\Di;
  */
 class Inspector
 {
+    /**
+     * @inject
+     * @var Cache
+     */
+    public $cache;
 
     /**
      * @param $class
@@ -16,6 +21,10 @@ class Inspector
      */
     public function getMethodArguments($class, $method)
     {
+        $result = $this->cache->get(__METHOD__, func_get_args());
+        if($result) {
+            return $result;
+        }
         $arguments = array();
         $reflection = Reflection::getReflectionMethod($class, $method);
         foreach ($reflection->getParameters() as $parameter) {
@@ -25,6 +34,7 @@ class Inspector
                 $arguments[] = $parameter->getName();
             }
         }
+        $this->cache->set(__METHOD__, func_get_args(), $arguments);
         return $arguments;
     }
 
@@ -35,6 +45,10 @@ class Inspector
      */
     public function getMethodRequiredCount($class, $method)
     {
+        $result = $this->cache->get(__METHOD__, func_get_args());
+        if($result) {
+            return $result;
+        }
         $requiredCount = 0;
         $reflection = Reflection::getReflectionMethod($class, $method);
         foreach ($reflection->getParameters() as $parameter) {
@@ -42,6 +56,7 @@ class Inspector
                 $requiredCount++;
             }
         }
+        $this->cache->set(__METHOD__, func_get_args(), $requiredCount);
         return $requiredCount;
     }
 
@@ -53,11 +68,16 @@ class Inspector
      */
     public function getClassProperties($class)
     {
+        $result = $this->cache->get(__METHOD__, func_get_args());
+        if($result) {
+            return $result;
+        }
         $map = array();
         $reflectionClass = Reflection::getReflectionClass($class);
         foreach ($reflectionClass->getProperties() as $property) {
             $map[$property->getName()] = $property->isPublic();
         }
+        $this->cache->set(__METHOD__, func_get_args(), $map);
         return $map;
     }
 
@@ -67,10 +87,15 @@ class Inspector
      */
     public function getPublicMethods($class)
     {
+        $result = $this->cache->get(__METHOD__, func_get_args());
+        if($result) {
+            return $result;
+        }
         $result = array();
         foreach(Reflection::getReflectionClass($class)->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             $result[] = $method->getName();
         }
+        $this->cache->set(__METHOD__, func_get_args(), $result);
         return $result;
     }
 
@@ -81,6 +106,10 @@ class Inspector
      */
     public function getClassInjection($class)
     {
+        $result = $this->cache->get(__METHOD__, func_get_args());
+        if($result) {
+            return $result;
+        }
         $injection = array();
         $reflectionClass = Reflection::getReflectionClass($class);
         foreach ($reflectionClass->getProperties() as $property) {
@@ -140,6 +169,7 @@ class Inspector
                 }
             }
         }
+        $this->cache->set(__METHOD__, func_get_args(), $injection);
         return $injection;
     }
 
