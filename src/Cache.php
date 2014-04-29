@@ -16,38 +16,41 @@ class Cache
 
     /**
      * get unique key for given parameters
+     * @param string $class
      * @param string $method
      * @param array $arguments
      * @return string
      */
-    protected function getKey($method, $arguments)
+    protected function getKey($class, $method, $arguments)
     {
-        return md5($method . ' ' . implode(' ', $arguments));
+        return md5($class .' '. $method . ' ' . implode(' ', $arguments));
     }
 
     /**
      * get values from cache
+     * @param string $class
      * @param string $method
      * @param array $arguments
      * @return mixed|bull
      */
-    function get($method, $arguments)
+    function get($class, $method, $arguments)
     {
-        $key = $this->getKey($method, $arguments);
-        if(isset($this->data[$key])) {
+        if($this->contains($class, $method, $arguments)) {
+            $key = $this->getKey($class, $method, $arguments);
             return $this->data[$key];
         }
     }
 
     /**
      * set cache value
+     * @param string $class
      * @param string $method
      * @param array $arguments
      * @param mixed $result
      */
-    function set($method, $arguments, $result)
+    function set($class, $method, $arguments, $result)
     {
-        $key = $this->getKey($method, $arguments);
+        $key = $this->getKey($class, $method, $arguments);
         $this->data[$key] = $result;
     }
 
@@ -67,5 +70,17 @@ class Cache
     function setData($data)
     {
         $this->data = $data;
+    }
+
+    /**
+     * @param $class
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public function contains($class, $method, $arguments)
+    {
+        $key = $this->getKey($class, $method, $arguments);
+        return isset($this->data[$key]);
     }
 }

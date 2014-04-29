@@ -38,4 +38,9 @@ class Reference
     {
         return $manager->get($this->class);
     }
+
+    public static function __set_state($data)
+    {
+        return new self($data['class']);
+    }
 }

@@ -27,5 +27,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $cachedTime = microtime(1) - $startTime;
 
         $this->assertGreaterThan($cachedTime, $parsingTime);
+
+        $this->assertNull($manager->get('Cti\Di\Cache')->get(1,2,array(3)));
     }
 } 

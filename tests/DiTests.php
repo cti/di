@@ -2,6 +2,7 @@
 
 use Cti\Di\Configuration;
 use Cti\Di\Manager;
+use Cti\Di\Reference;
 
 class DiTests extends PHPUnit_Framework_TestCase
 {
@@ -262,5 +263,13 @@ class DiTests extends PHPUnit_Framework_TestCase
         $configuration->load($file);
         $this->assertTrue(file_exists($local));
         unlink($local);
+    }
+
+    public function testReferenceRestore()
+    {
+        $r = Reference::__set_state(array('class' => 'Test'));
+        $this->assertInstanceOf("Cti\\Di\\Reference", $r);
+        $this->assertSame($r->getClass(), 'Test');
+
     }
 }

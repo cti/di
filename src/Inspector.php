@@ -21,9 +21,8 @@ class Inspector
      */
     public function getMethodArguments($class, $method)
     {
-        $result = $this->cache->get(__METHOD__, func_get_args());
-        if($result) {
-            return $result;
+        if($this->cache->contains(__CLASS__, __METHOD__, func_get_args())) {
+            return $this->cache->get(__CLASS__, __METHOD__, func_get_args());
         }
         $arguments = array();
         $reflection = Reflection::getReflectionMethod($class, $method);
@@ -34,7 +33,7 @@ class Inspector
                 $arguments[] = $parameter->getName();
             }
         }
-        $this->cache->set(__METHOD__, func_get_args(), $arguments);
+        $this->cache->set(__CLASS__, __METHOD__, func_get_args(), $arguments);
         return $arguments;
     }
 
@@ -45,9 +44,8 @@ class Inspector
      */
     public function getMethodRequiredCount($class, $method)
     {
-        $result = $this->cache->get(__METHOD__, func_get_args());
-        if($result) {
-            return $result;
+        if($this->cache->contains(__CLASS__, __METHOD__, func_get_args())) {
+            return $this->cache->get(__CLASS__, __METHOD__, func_get_args());
         }
         $requiredCount = 0;
         $reflection = Reflection::getReflectionMethod($class, $method);
@@ -56,7 +54,7 @@ class Inspector
                 $requiredCount++;
             }
         }
-        $this->cache->set(__METHOD__, func_get_args(), $requiredCount);
+        $this->cache->set(__CLASS__, __METHOD__, func_get_args(), $requiredCount);
         return $requiredCount;
     }
 
@@ -68,16 +66,15 @@ class Inspector
      */
     public function getClassProperties($class)
     {
-        $result = $this->cache->get(__METHOD__, func_get_args());
-        if($result) {
-            return $result;
+        if($this->cache->contains(__CLASS__, __METHOD__, func_get_args())) {
+            return $this->cache->get(__CLASS__, __METHOD__, func_get_args());
         }
         $map = array();
         $reflectionClass = Reflection::getReflectionClass($class);
         foreach ($reflectionClass->getProperties() as $property) {
             $map[$property->getName()] = $property->isPublic();
         }
-        $this->cache->set(__METHOD__, func_get_args(), $map);
+        $this->cache->set(__CLASS__, __METHOD__, func_get_args(), $map);
         return $map;
     }
 
@@ -87,15 +84,14 @@ class Inspector
      */
     public function getPublicMethods($class)
     {
-        $result = $this->cache->get(__METHOD__, func_get_args());
-        if($result) {
-            return $result;
+        if($this->cache->contains(__CLASS__, __METHOD__, func_get_args())) {
+            return $this->cache->get(__CLASS__, __METHOD__, func_get_args());
         }
         $result = array();
         foreach(Reflection::getReflectionClass($class)->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             $result[] = $method->getName();
         }
-        $this->cache->set(__METHOD__, func_get_args(), $result);
+        $this->cache->set(__CLASS__, __METHOD__, func_get_args(), $result);
         return $result;
     }
 
@@ -106,9 +102,8 @@ class Inspector
      */
     public function getClassInjection($class)
     {
-        $result = $this->cache->get(__METHOD__, func_get_args());
-        if($result) {
-            return $result;
+        if($this->cache->contains(__CLASS__, __METHOD__, func_get_args())) {
+            return $this->cache->get(__CLASS__, __METHOD__, func_get_args());
         }
         $injection = array();
         $reflectionClass = Reflection::getReflectionClass($class);
@@ -169,7 +164,7 @@ class Inspector
                 }
             }
         }
-        $this->cache->set(__METHOD__, func_get_args(), $injection);
+        $this->cache->set(__CLASS__, __METHOD__, func_get_args(), $injection);
         return $injection;
     }
 
