@@ -19,10 +19,6 @@ Using composer.
 }
 ```
 
-# Components
+# Documentation
 
-* Configuration used by Manager while create an instance
-* Manager creates instance injecting all dependencies
-* Service locator works on top of Manager
-
-See the `doc` directory for more detailed documentation.
+All documentation is located in project wiki.
