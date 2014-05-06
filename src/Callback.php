@@ -38,7 +38,7 @@ class Callback
         $this->class = $class;
         $this->method = $method;
 
-        $inspector = $manager->get('Cti\Di\Inspector');
+        $inspector = $manager->get('Cti\\Di\\Inspector');
 
         $this->arguments = $inspector->getMethodArguments($class, $method);
         $this->requiredCount = $inspector->getMethodRequiredCount($class, $method);
@@ -57,16 +57,23 @@ class Callback
         foreach ($this->arguments as $index => $argument) {
             if(is_string($argument) && isset($parameters[$argument])) {
                 $arguments[] = $parameters[$argument];
+
             } elseif ($argument instanceof Reference) {
 
                 // find parameter by class
+                $foundInParams = false;
                 foreach($parameters as $param) {
                     if(is_a($param, $argument->getClass())) {
                         $arguments[] = $param;
-                        break 2;
+                        $foundInParams = true;
+                        break;
                     }
                 }
-                $arguments[] = $argument->getInstance($manager);
+
+                if(!$foundInParams) {
+                    $arguments[] = $argument->getInstance($manager);
+                }
+
             } else {
                 if (count(array_filter(array_keys($parameters), 'is_int')) > 0) {
                     $arguments[] = array_shift($parameters);
@@ -77,6 +84,7 @@ class Callback
                 }
             }
         }
+
         if ($this->method == '__construct') {
             if(!count($arguments)) {
                 return new $this->class;

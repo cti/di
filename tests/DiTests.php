@@ -1,5 +1,7 @@
 <?php
 
+use Common\Application;
+use Common\Module;
 use Cti\Di\Configuration;
 use Cti\Di\Manager;
 use Cti\Di\Reference;
@@ -32,6 +34,21 @@ class DiTests extends PHPUnit_Framework_TestCase
             '_state' => '_state'
         ));
         $this->assertSame($module->getProtectedState(), null);
+    }
+
+    public function testInstanceInjection()
+    {
+        $manager = new Manager();
+        $module = new Module();
+        $app = new Application();
+
+        $result = $manager->call($this, 'callInjection', array($module, $app));
+        $this->assertSame($result, array($app, $module));
+    }
+
+    public function callInjection(Application $app, Module $module)
+    {
+        return array($app, $module);
     }
 
     public function testFilesystemLoader()

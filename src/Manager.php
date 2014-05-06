@@ -66,17 +66,17 @@ class Manager
     {
         return $this->enableServiceLookup;
     }
-    
+
     /**
      * switch configure properties flah
      * @param boolean $flag
      * @return Manager
      */
-    function setConfigureAllProperties($value) 
+    function setConfigureAllProperties($value)
     {
         $this->configureAllProperties = $value;
     }
-    
+
     /**
      * @return  boolean
      */
@@ -111,7 +111,7 @@ class Manager
      */
     public function get($class)
     {
-        if($this->config->hasAlias($class)) {
+        if ($this->config->hasAlias($class)) {
             return $this->get($this->config->getAlias($class));
         }
         if (!$class) {
@@ -121,23 +121,15 @@ class Manager
 
             $instance = null;
 
-            if($this->enableServiceLookup && isset($this->instance['Cti\Di\Locator'])) {
-                $locator = $this->instance['Cti\Di\Locator'];
+            if ($this->enableServiceLookup && isset($this->instance['Cti\\Di\\Locator'])) {
+                $locator = $this->instance['Cti\\Di\\Locator'];
                 $instance = $locator->findByClass($class);
             }
 
             $this->instance[$class] = $instance ? $instance : $this->createInstance($class);
 
-            if (!$instance && method_exists($class, 'init')) {
-                if(in_array('init', $this->getInspector()->getPublicMethods($class))) {
-                    $this->call($this->instance[$class], 'init');
-
-                } else {
-                    $reflection = Reflection::getReflectionMethod($class, 'init');
-                    $reflection->setAccessible(true);
-                    $this->call($this->instance[$class], 'init');
-                    $reflection->setAccessible(false);
-                }
+            if (!$instance) {
+                $this->getInitializer()->process($this->instance[$class]);
             }
         }
         return $this->instance[$class];
@@ -150,16 +142,12 @@ class Manager
      */
     public function create($class, $config = array())
     {
-        if($this->config->hasAlias($class)) {
+        if ($this->config->hasAlias($class)) {
             return $this->create($this->config->getAlias($class));
         }
 
         $instance = $this->createInstance($class, $config);
-
-        if (method_exists($class, 'init')) {
-            $this->call($instance, 'init');
-        }
-
+        $this->getInitializer()->process($instance);
         return $instance;
     }
 
@@ -175,11 +163,11 @@ class Manager
         $configuration = $this->config->get($class);
         $parameters = array_merge($configuration, $config);
 
-        if($this->enableServiceLookup && isset($this->instance['Cti\Di\Locator'])) {
-            $locator = $this->instance['Cti\Di\Locator'];
-            foreach($parameters as $name => $value) {
-                if(is_string($value) && $value[0] == '@') {
-                    if($value[1] == '@') {
+        if ($this->enableServiceLookup && isset($this->instance['Cti\\Di\\Locator'])) {
+            $locator = $this->instance['Cti\\Di\\Locator'];
+            foreach ($parameters as $name => $value) {
+                if (is_string($value) && $value[0] == '@') {
+                    if ($value[1] == '@') {
                         $parameters[$name] = substr($value, 1);
                     } else {
                         $parameters[$name] = $locator->get(substr($value, 1));
@@ -188,7 +176,7 @@ class Manager
             }
         }
 
-        if(!class_exists($class)) {
+        if (!class_exists($class)) {
             throw new Exception("Class $class not found!");
         }
 
@@ -204,34 +192,34 @@ class Manager
             $instance = $callback->launch(null, $parameters, $this);
         }
 
-        if($class == 'Cti\Di\Inspector') { 
-            $instance->cache = $this->get('Cti\Di\Cache');
+        if ($class == 'Cti\\Di\\Inspector') {
+            $instance->cache = $this->get('Cti\\Di\\Cache');
 
         } else {
             $inspector = $this->getInspector();
 
             // injection contains class injection
             $injection = array();
-            foreach($inspector->getClassInjection($class) as $name => $value) {
+            foreach ($inspector->getClassInjection($class) as $name => $value) {
                 $injection[$name] = $this->get($value);
             }
 
             $properties = $inspector->getClassProperties($class);
             foreach ($parameters as $name => $value) {
-                if(isset($properties[$name])) {
+                if (isset($properties[$name])) {
                     $injection[$name] = $value;
                 }
             }
 
-            foreach($injection as $name => $value) {
+            foreach ($injection as $name => $value) {
                 // public property
-                if($properties[$name]) {
+                if ($properties[$name]) {
                     $instance->$name = $value;
                     continue;
                 }
 
                 // protected property
-                if($this->configureAllProperties) {
+                if ($this->configureAllProperties) {
                     $reflection = Reflection::getReflectionProperty($class, $name);
                     $reflection->setAccessible(true);
                     $reflection->setValue($instance, $value);
@@ -244,15 +232,15 @@ class Manager
     }
 
     /**
-     * @param mixed $object 
+     * @param mixed $object
      * @return Manager
      */
     public function register($object, $class = null)
     {
-        if(!$class) {
+        if (!$class) {
             $class = get_class($object);
         }
-        if(isset($this->instance[$class])) {
+        if (isset($this->instance[$class])) {
             throw new Exception("Error Injecting $class");
         }
         $this->instance[$class] = $object;
@@ -268,9 +256,9 @@ class Manager
     }
 
     /**
-     * @param mixed  $instance
+     * @param mixed $instance
      * @param string $method
-     * @param array  $arguments
+     * @param array $arguments
      * @return mixed
      */
     public function call($instance, $method, $arguments = array())
@@ -304,6 +292,14 @@ class Manager
      */
     public function getInspector()
     {
-        return $this->get('Cti\Di\Inspector');
+        return $this->get('Cti\\Di\\Inspector');
+    }
+
+    /**
+     * @return Initializer
+     */
+    public function getInitializer()
+    {
+        return $this->get('Cti\\Di\\Initializer');
     }
 }

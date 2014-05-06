@@ -155,7 +155,6 @@ class Inspector
                                         $injected_class = $aliases[$ns] . substr($injected_class, strlen($ns));
                                     }
                                 }
-
                             }
                             $injection[$property->getName()] = $injected_class;
                             break;
@@ -167,6 +166,4 @@ class Inspector
         $this->cache->set(__CLASS__, __METHOD__, func_get_args(), $injection);
         return $injection;
     }
-
-
 }

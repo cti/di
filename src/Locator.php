@@ -20,7 +20,7 @@ class Locator
      */
     protected $definition = array(
         'manager' => array(
-            'class' => 'Cti\Di\Manager',
+            'class' => 'Cti\\Di\\Manager',
             'configuration' => array()
         )
     );
