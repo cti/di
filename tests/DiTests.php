@@ -149,7 +149,7 @@ class DiTests extends PHPUnit_Framework_TestCase
     public function testAlias()
     {
         $manager = new Manager;
-        $manager->setAlias('app', 'Common\Application');
+        $manager->getConfiguration()->setAlias('app', 'Common\Application');
         $this->assertSame($manager->get('app'), $manager->get('Common\Application'));
         $this->assertInstanceOf('Common\Application', $manager->create('app'));
     }
@@ -167,7 +167,7 @@ class DiTests extends PHPUnit_Framework_TestCase
     public function testInterfaceImplementation()
     {
         $manager = new Manager();
-        $manager->setAlias('Common\GatewayInterface', 'Common\ProxyGateway');
+        $manager->getConfiguration()->setAlias('Common\GatewayInterface', 'Common\ProxyGateway');
 
         $this->assertInstanceOf('Common\ProxyGateway', $manager->get('Common\GatewayInterface'));
     }
@@ -216,8 +216,8 @@ class DiTests extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception');
         
         $manager = new Manager;
-        $manager->setAlias('app', 'Common\Application');
-        $manager->setAlias('app', 'Common\Module');
+        $manager->getConfiguration()->setAlias('app', 'Common\Application');
+        $manager->getConfiguration()->setAlias('app', 'Common\Module');
     }
 
     public function testMethodParamNotFoundException()

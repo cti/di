@@ -6,12 +6,6 @@ class Initializer
 {
     /**
      * @inject
-     * @var Inspector
-     */
-    protected $inspector;
-
-    /**
-     * @inject
      * @var Manager
      */
     protected $manager;
@@ -36,7 +30,7 @@ class Initializer
         $class = get_class($instance);
 
         if (method_exists($instance, 'init')) {
-            if (in_array('init', $this->getInspector()->getPublicMethods($class))) {
+            if (in_array('init', $this->getManager()->getInspector()->getPublicMethods($class))) {
                 $this->getManager()->call($instance, 'init');
 
             } else {
@@ -90,14 +84,6 @@ class Initializer
             $this->after[$class] = array();
         }
         $this->after[$class][] = $callback;
-    }
-
-    /**
-     * @return Inspector
-     */
-    public function getInspector()
-    {
-        return $this->inspector;
     }
 
     /**

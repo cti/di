@@ -9,11 +9,6 @@ namespace Cti\Di;
 class Manager
 {
     /**
-     * @var Configuration
-     */
-    protected $config;
-
-    /**
      * @var array
      */
     protected $instance = array();
@@ -27,7 +22,7 @@ class Manager
      * service lookup flag
      * @var float
      */
-    protected $enableServiceLookup = true;
+    protected $serviceLookup = true;
 
     /**
      * configure all properties
@@ -43,19 +38,22 @@ class Manager
         if (!$config) {
             $config = new Configuration;
         }
+
         $this->register($this);
-        $this->register($this->config = $config);
+        $this->register($config);
+
         $this->register(new Cache);
     }
 
     /**
      * switch locator service integration
-     * @param boolean $flag
+     * @param $value
+     * @internal param bool $flag
      * @return Manager
      */
     function setServiceLookup($value)
     {
-        $this->enableServiceLookup = $value;
+        $this->serviceLookup = $value;
         return $this;
     }
 
@@ -64,12 +62,13 @@ class Manager
      */
     function getServiceLookup()
     {
-        return $this->enableServiceLookup;
+        return $this->serviceLookup;
     }
 
     /**
-     * switch configure properties flah
-     * @param boolean $flag
+     * switch configure properties flag
+     * @param $value
+     * @internal param bool $flag
      * @return Manager
      */
     function setConfigureAllProperties($value)
@@ -78,30 +77,11 @@ class Manager
     }
 
     /**
-     * @return  boolean
+     * @return boolean
      */
     function getConfigureAllProperties()
     {
         return $this->configureAllProperties;
-    }
-
-    /**
-     * @return Configuration
-     */
-    public function getConfiguration()
-    {
-        return $this->config;
-    }
-
-    /**
-     * @param string $source
-     * @param string $destination
-     * @return Manager
-     */
-    public function setAlias($source, $destination)
-    {
-        $this->config->setAlias($source, $destination);
-        return $this;
     }
 
     /**
@@ -111,26 +91,30 @@ class Manager
      */
     public function get($class)
     {
-        if ($this->config->hasAlias($class)) {
-            return $this->get($this->config->getAlias($class));
+        if ($this->getConfiguration()->hasAlias($class)) {
+            return $this->get($this->getConfiguration()->getAlias($class));
         }
+
         if (!$class) {
             throw new Exception();
         }
+
         if (!isset($this->instance[$class])) {
 
             $instance = null;
 
-            if ($this->enableServiceLookup && isset($this->instance['Cti\\Di\\Locator'])) {
-                $locator = $this->instance['Cti\\Di\\Locator'];
-                $instance = $locator->findByClass($class);
+            if ($this->getServiceLookup() && $this->hasLocator()) {
+                $instance = $this->getLocator()->findByClass($class);
             }
 
-            $this->instance[$class] = $instance ? $instance : $this->createInstance($class);
+            if ($instance) {
+                $this->instance[$class] = $instance;
 
-            if (!$instance) {
+            } else {
+                $this->instance[$class] = $this->createInstance($class);
                 $this->getInitializer()->process($this->instance[$class]);
             }
+
         }
         return $this->instance[$class];
     }
@@ -142,8 +126,8 @@ class Manager
      */
     public function create($class, $config = array())
     {
-        if ($this->config->hasAlias($class)) {
-            return $this->create($this->config->getAlias($class));
+        if ($this->getConfiguration()->hasAlias($class)) {
+            return $this->create($this->getConfiguration()->getAlias($class));
         }
 
         $instance = $this->createInstance($class, $config);
@@ -160,17 +144,16 @@ class Manager
      */
     protected function createInstance($class, $config = array())
     {
-        $configuration = $this->config->get($class);
+        $configuration = $this->getConfiguration()->get($class);
         $parameters = array_merge($configuration, $config);
 
-        if ($this->enableServiceLookup && isset($this->instance['Cti\\Di\\Locator'])) {
-            $locator = $this->instance['Cti\\Di\\Locator'];
+        if ($this->getServiceLookup() && $this->hasLocator()) {
             foreach ($parameters as $name => $value) {
                 if (is_string($value) && $value[0] == '@') {
                     if ($value[1] == '@') {
                         $parameters[$name] = substr($value, 1);
                     } else {
-                        $parameters[$name] = $locator->get(substr($value, 1));
+                        $parameters[$name] = $this->getLocator()->get(substr($value, 1));
                     }
                 }
             }
@@ -192,40 +175,12 @@ class Manager
             $instance = $callback->launch(null, $parameters, $this);
         }
 
-        if ($class == 'Cti\\Di\\Inspector') {
-            $instance->cache = $this->get('Cti\\Di\\Cache');
+        if (in_array($class, array('Cti\\Di\\Inspector', 'Cti\\Di\\Injector'))) {
+            // injector not exists, manual manager injection
+            $instance->manager = $this;
 
         } else {
-            $inspector = $this->getInspector();
-
-            // injection contains class injection
-            $injection = array();
-            foreach ($inspector->getClassInjection($class) as $name => $value) {
-                $injection[$name] = $this->get($value);
-            }
-
-            $properties = $inspector->getClassProperties($class);
-            foreach ($parameters as $name => $value) {
-                if (isset($properties[$name])) {
-                    $injection[$name] = $value;
-                }
-            }
-
-            foreach ($injection as $name => $value) {
-                // public property
-                if ($properties[$name]) {
-                    $instance->$name = $value;
-                    continue;
-                }
-
-                // protected property
-                if ($this->configureAllProperties) {
-                    $reflection = Reflection::getReflectionProperty($class, $name);
-                    $reflection->setAccessible(true);
-                    $reflection->setValue($instance, $value);
-                    $reflection->setAccessible(false);
-                }
-            }
+            $this->getInjector()->process($instance, $parameters);
         }
 
         return $instance;
@@ -233,6 +188,8 @@ class Manager
 
     /**
      * @param mixed $object
+     * @param string $class
+     * @throws Exception
      * @return Manager
      */
     public function register($object, $class = null)
@@ -249,6 +206,7 @@ class Manager
 
     /**
      * @param string $class
+     * @return bool
      */
     public function contains($class)
     {
@@ -280,11 +238,37 @@ class Manager
      */
     protected function getCallback($class, $method)
     {
-        $key = $class . '.' . $method;
+        $key = $class . '::' . $method;
         if (!isset($this->callback[$key])) {
             $this->callback[$key] = new Callback($this, $class, $method);
         }
         return $this->callback[$key];
+    }
+
+    /**
+     * @return Cache
+     * @throws Exception
+     */
+    public function getCache()
+    {
+        return $this->get('Cti\\Di\\Cache');
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->instance['Cti\\Di\\Configuration'];
+    }
+
+    /**
+     * @return Injector
+     * @throws Exception
+     */
+    public function getInjector()
+    {
+        return $this->get('Cti\\Di\\Injector');
     }
 
     /**
@@ -301,5 +285,22 @@ class Manager
     public function getInitializer()
     {
         return $this->get('Cti\\Di\\Initializer');
+    }
+
+    /**
+     * @return Locator
+     * @throws Exception
+     */
+    public function getLocator()
+    {
+        return $this->get('Cti\\Di\\Locator');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLocator()
+    {
+        return isset($this->instance['Cti\\Di\\Locator']);
     }
 }
