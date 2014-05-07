@@ -256,6 +256,9 @@ class Manager
      */
     public function getCache()
     {
+        if(isset($this->instance['Cti\\Di\\Cache'])) {
+            return $this->instance['Cti\\Di\\Cache'];
+        }
         return $this->get('Cti\\Di\\Cache');
     }
 
@@ -273,6 +276,9 @@ class Manager
      */
     public function getInjector()
     {
+        if(isset($this->instance['Cti\\Di\\Injector'])) {
+            return $this->instance['Cti\\Di\\Injector'];
+        }
         return $this->get('Cti\\Di\\Injector');
     }
 
@@ -281,6 +287,9 @@ class Manager
      */
     public function getInspector()
     {
+        if(isset($this->instance['Cti\\Di\\Inspector'])) {
+            return $this->instance['Cti\\Di\\Inspector'];
+        }
         return $this->get('Cti\\Di\\Inspector');
     }
 
@@ -289,6 +298,9 @@ class Manager
      */
     public function getInitializer()
     {
+        if(isset($this->instance['Cti\\Di\\Initializer'])) {
+            return $this->instance['Cti\\Di\\Initializer'];
+        }
         return $this->get('Cti\\Di\\Initializer');
     }
 
@@ -298,6 +310,9 @@ class Manager
      */
     public function getLocator()
     {
+        if(isset($this->instance['Cti\\Di\\Locator'])) {
+            return $this->instance['Cti\\Di\\Locator'];
+        }
         return $this->get('Cti\\Di\\Locator');
     }
 

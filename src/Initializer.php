@@ -25,9 +25,9 @@ class Initializer
      */
     function process($instance)
     {
-        $this->processHook($this->before, $instance);
-
         $class = get_class($instance);
+
+        $this->processHook($this->before, $class, $instance);
 
         if (method_exists($instance, 'init')) {
             if (in_array('init', $this->getManager()->getInspector()->getPublicMethods($class))) {
@@ -41,13 +41,11 @@ class Initializer
             }
         }
 
-        $this->processHook($this->after, $instance);
+        $this->processHook($this->after, $class, $instance);
     }
 
-    public function processHook($array, $instance)
+    public function processHook($array, $class, $instance)
     {
-        $class = get_class($instance);
-
         if(isset($array[$class])) {
             foreach($array[$class] as $callback) {
                 if(is_array($callback)) {
