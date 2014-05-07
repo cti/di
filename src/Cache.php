@@ -17,7 +17,7 @@ class Cache
     /**
      * @var bool
      */
-    public $debug;
+    public $useHash;
 
     /**
      * cache container
@@ -33,11 +33,11 @@ class Cache
      */
     protected function getKey($method, $arguments)
     {
-        if(is_null($this->debug)) {
-            $this->debug = $this->manager->getConfiguration()->get(__CLASS__, 'debug', false);
+        if(is_null($this->useHash)) {
+            $this->useHash = $this->manager->getConfiguration()->get(__CLASS__, 'useHash', false);
         }
         $key = $method . '(' . implode(', ', $arguments) . ')';
-        return $this->debug ? $key : md5($key);
+        return $this->useHash ? md5($key) : $key;
     }
 
     /**

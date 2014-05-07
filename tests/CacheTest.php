@@ -8,12 +8,14 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     {
         $configuration = new \Cti\Di\Configuration(array(
             'Cti\\Di\\Cache' => array(
-                'debug' => true
+                'useHash' => true
             )
         ));
         $manager = new Manager($configuration);
 
-        $this->assertTrue($manager->getCache()->debug);
+        $manager->getCache()->contains(__METHOD__, array());
+
+        $this->assertTrue($manager->getCache()->useHash);
     }
     public function testCache()
     {
