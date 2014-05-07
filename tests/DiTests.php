@@ -8,6 +8,12 @@ use Cti\Di\Reference;
 
 class DiTests extends PHPUnit_Framework_TestCase
 {
+    public function testCustomManager()
+    {
+        $manager = new \Common\CustomManager();
+        $this->assertSame($manager, $manager->get('Cti\\Di\\Manager'));
+    }
+
     public function testProtectedInit()
     {
         $manager = new Manager;

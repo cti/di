@@ -40,6 +40,10 @@ class Manager
         }
 
         $this->register($this);
+        if(!$this->contains(__CLASS__)) {
+            $this->register($this, __CLASS__);
+        }
+
         $this->register($config);
 
         $this->register(new Cache);
