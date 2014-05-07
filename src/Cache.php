@@ -9,6 +9,11 @@ namespace Cti\Di;
 class Cache
 {
     /**
+     * @var bool
+     */
+    public $debug = false;
+
+    /**
      * cache container
      * @var array
      */
@@ -23,7 +28,8 @@ class Cache
      */
     protected function getKey($class, $method, $arguments)
     {
-        return md5($class .' '. $method . ' ' . implode(' ', $arguments));
+        $key = $class . '::' . $method . '(' . implode(', ', $arguments) . ')';
+        return $this->debug ? $key : md5($key);
     }
 
     /**
