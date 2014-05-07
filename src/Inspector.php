@@ -21,8 +21,8 @@ class Inspector
      */
     public function getMethodArguments($class, $method)
     {
-        if($this->getCache()->contains(__CLASS__, __METHOD__, func_get_args())) {
-            return $this->getCache()->get(__CLASS__, __METHOD__, func_get_args());
+        if($this->getCache()->contains(__METHOD__, func_get_args())) {
+            return $this->getCache()->get(__METHOD__, func_get_args());
         }
         $arguments = array();
         $reflection = Reflection::getReflectionMethod($class, $method);
@@ -33,7 +33,7 @@ class Inspector
                 $arguments[] = $parameter->getName();
             }
         }
-        $this->getCache()->set(__CLASS__, __METHOD__, func_get_args(), $arguments);
+        $this->getCache()->set(__METHOD__, func_get_args(), $arguments);
         return $arguments;
     }
 
@@ -44,8 +44,8 @@ class Inspector
      */
     public function getMethodRequiredCount($class, $method)
     {
-        if($this->getCache()->contains(__CLASS__, __METHOD__, func_get_args())) {
-            return $this->getCache()->get(__CLASS__, __METHOD__, func_get_args());
+        if($this->getCache()->contains(__METHOD__, func_get_args())) {
+            return $this->getCache()->get(__METHOD__, func_get_args());
         }
         $requiredCount = 0;
         $reflection = Reflection::getReflectionMethod($class, $method);
@@ -54,7 +54,7 @@ class Inspector
                 $requiredCount++;
             }
         }
-        $this->getCache()->set(__CLASS__, __METHOD__, func_get_args(), $requiredCount);
+        $this->getCache()->set(__METHOD__, func_get_args(), $requiredCount);
         return $requiredCount;
     }
 
@@ -66,15 +66,15 @@ class Inspector
      */
     public function getClassProperties($class)
     {
-        if($this->getCache()->contains(__CLASS__, __METHOD__, func_get_args())) {
-            return $this->getCache()->get(__CLASS__, __METHOD__, func_get_args());
+        if($this->getCache()->contains(__METHOD__, func_get_args())) {
+            return $this->getCache()->get(__METHOD__, func_get_args());
         }
         $map = array();
         $reflectionClass = Reflection::getReflectionClass($class);
         foreach ($reflectionClass->getProperties() as $property) {
             $map[$property->getName()] = $property->isPublic();
         }
-        $this->getCache()->set(__CLASS__, __METHOD__, func_get_args(), $map);
+        $this->getCache()->set(__METHOD__, func_get_args(), $map);
         return $map;
     }
 
@@ -84,14 +84,14 @@ class Inspector
      */
     public function getPublicMethods($class)
     {
-        if($this->getCache()->contains(__CLASS__, __METHOD__, func_get_args())) {
-            return $this->getCache()->get(__CLASS__, __METHOD__, func_get_args());
+        if($this->getCache()->contains(__METHOD__, func_get_args())) {
+            return $this->getCache()->get(__METHOD__, func_get_args());
         }
         $result = array();
         foreach(Reflection::getReflectionClass($class)->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             $result[] = $method->getName();
         }
-        $this->getCache()->set(__CLASS__, __METHOD__, func_get_args(), $result);
+        $this->getCache()->set(__METHOD__, func_get_args(), $result);
         return $result;
     }
 
@@ -102,8 +102,8 @@ class Inspector
      */
     public function getClassInjection($class)
     {
-        if($this->getCache()->contains(__CLASS__, __METHOD__, func_get_args())) {
-            return $this->getCache()->get(__CLASS__, __METHOD__, func_get_args());
+        if($this->getCache()->contains(__METHOD__, func_get_args())) {
+            return $this->getCache()->get(__METHOD__, func_get_args());
         }
         $injection = array();
         $reflectionClass = Reflection::getReflectionClass($class);
@@ -163,7 +163,7 @@ class Inspector
                 }
             }
         }
-        $this->getCache()->set(__CLASS__, __METHOD__, func_get_args(), $injection);
+        $this->getCache()->set(__METHOD__, func_get_args(), $injection);
         return $injection;
     }
 

@@ -39,6 +39,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan($cachedTime, $parsingTime);
 
-        $this->assertNull($manager->get('Cti\Di\Cache')->get(1,2,array(3)));
+        $this->assertNull($manager->get('Cti\Di\Cache')->get(2,array(3)));
     }
 } 
