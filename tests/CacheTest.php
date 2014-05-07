@@ -4,6 +4,17 @@ use Cti\Di\Manager;
 
 class CacheTest extends \PHPUnit_Framework_TestCase
 {
+    public function testDebug()
+    {
+        $configuration = new \Cti\Di\Configuration(array(
+            'Cti\\Di\\Cache' => array(
+                'debug' => true
+            )
+        ));
+        $manager = new Manager($configuration);
+
+        $this->assertTrue($manager->getCache()->debug);
+    }
     public function testCache()
     {
         $manager = new Manager();

@@ -40,13 +40,19 @@ class Manager
         }
 
         $this->register($this);
+
+        // register child
         if(!$this->contains(__CLASS__)) {
             $this->register($this, __CLASS__);
         }
 
         $this->register($config);
 
-        $this->register(new Cache);
+        $cache = new Cache;
+        if($config->get('Cti\\Di\\Cache', 'debug') !== null) {
+            $cache->debug = $config->get('Cti\\Di\\Cache', 'debug');
+        }
+        $this->register($cache);
     }
 
     /**
