@@ -9,9 +9,15 @@ namespace Cti\Di;
 class Cache
 {
     /**
+     * @inject
+     * @var Manager
+     */
+    public $manager;
+
+    /**
      * @var bool
      */
-    public $debug = false;
+    public $debug;
 
     /**
      * cache container
@@ -28,6 +34,9 @@ class Cache
      */
     protected function getKey($class, $method, $arguments)
     {
+        if(is_null($this->debug)) {
+            $this->debug = $this->manager->getConfiguration()->get(__CLASS__, 'debug', false);
+        }
         $key = $class . '::' . $method . '(' . implode(', ', $arguments) . ')';
         return $this->debug ? $key : md5($key);
     }

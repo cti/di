@@ -48,11 +48,6 @@ class Manager
 
         $this->register($config);
 
-        $cache = new Cache;
-        if($config->get('Cti\\Di\\Cache', 'debug') !== null) {
-            $cache->debug = $config->get('Cti\\Di\\Cache', 'debug');
-        }
-        $this->register($cache);
     }
 
     /**
@@ -185,7 +180,7 @@ class Manager
             $instance = $callback->launch(null, $parameters, $this);
         }
 
-        if (in_array($class, array('Cti\\Di\\Inspector', 'Cti\\Di\\Injector'))) {
+        if (in_array($class, array('Cti\\Di\\Inspector', 'Cti\\Di\\Injector', 'Cti\\Di\\Cache'))) {
             // injector not exists, manual manager injection
             $instance->manager = $this;
 
