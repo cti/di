@@ -5,6 +5,12 @@ use Cti\Di\Locator;
 
 class LocatorTest extends PHPUnit_Framework_TestCase
 {
+    function testInstantiate()
+    {
+        $manager = new Manager;
+        $this->assertInstanceOf('Cti\\Di\\Locator', $manager->getLocator());
+    }
+
     function testLocatorManagerLink()
     {
         $this->setExpectedException('Exception');
