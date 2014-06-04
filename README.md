@@ -21,4 +21,8 @@ Using composer.
 
 # Documentation
 
-All documentation is located in project wiki.
+- Manager
+- Configuration
+- Initialize
+- Caching
+- Locator
