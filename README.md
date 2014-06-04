@@ -21,8 +21,9 @@ Using composer.
 
 # Documentation
 
-- Manager
-- Configuration
-- Initialize
-- Caching
-- Locator
+- [Manager](https://github.com/cti/di/blob/master/docs/manager.md)
+- [Configuration](https://github.com/cti/di/blob/master/docs/configuration.md)
+- [Initialize](https://github.com/cti/di/blob/master/docs/intialize.md)
+- [Caching](https://github.com/cti/di/blob/master/docs/caching.md)
+- [Locator](https://github.com/cti/di/blob/master/docs/locator.md)
+- [Callback](https://github.com/cti/di/blob/master/docs/callback.md)
