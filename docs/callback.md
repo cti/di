@@ -28,5 +28,9 @@ $instance = $manager->create('Test');
 // Filesystem and Application would be created by Manager
 $callback->launch($instance, array('name' => 'nekufa'), $manager);
 
+// use manager (same as above)
+$manager->call($instance, 'method', array('name' => 'nekufa'));
 
+// use manager (create an instance)
+$manager->call('Test', 'method', array('name' => 'nekufa'));
 ```
