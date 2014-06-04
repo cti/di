@@ -176,7 +176,7 @@ $manager->setAlias('ProxyGateway', 'GatewayInterface');
 $manager->get('Application'); // prints ProxyGateway
 ```
 
-# Use integration
+# Using property injection
 
 ```php
 <?php
