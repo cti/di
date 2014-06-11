@@ -126,7 +126,7 @@ class Inspector
 
                                 $aliases = array();
 
-                                foreach(file($reflectionClass->getFileName()) as $line) {
+                                foreach(file($property->getDeclaringClass()->getFileName()) as $line) {
                                     if(strpos($line, 'use ') === 0) {
                                         $line = substr($line, 0, strpos($line, ';'));
                                         $chain = array_filter(explode(' ', $line), 'strlen');

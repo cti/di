@@ -2,12 +2,12 @@
 
 namespace Inject;
 
-use Inject\FakeNamespace;
+use Inject\FakeNamespace as QA;
 
 class ByNamespace {
     /**
      * @inject
-     * @var FakeNamespace\FakeClass
+     * @var QA\FakeClass
      */
     public $fakeClass;
 } 

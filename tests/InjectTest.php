@@ -36,5 +36,12 @@ class InjectTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->fakeClass->initialized);
     }
 
+    public function testInherit()
+    {
+        $container = $this->getManager()->get('Inject\ExtendedClass');
+        $this->assertNotEmpty($container->fakeClass);
+        $this->assertTrue($container->fakeClass->initialized);
+    }
+
 
 } 
