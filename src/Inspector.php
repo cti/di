@@ -108,7 +108,7 @@ class Inspector
         $injection = array();
         $reflectionClass = Reflection::getReflectionClass($class);
         foreach ($reflectionClass->getProperties() as $property) {
-            if (stristr($property->getDocComment(), '@inject')) {
+            if (stristr($property->getDocComment(), '@inject') || stristr($property->getDocComment(), '@new')) {
                 foreach (explode("\n", $property->getDocComment()) as $line) {
                     if (!stristr($line, '@var')) {
                         continue;
@@ -156,7 +156,10 @@ class Inspector
                                     }
                                 }
                             }
-                            $injection[$property->getName()] = $injected_class;
+                            $injection[$property->getName()] = array(
+                                'class' => $injected_class,
+                                'new' => stristr($property->getDocComment(), '@new')
+                            );
                             break;
                         }
                     }

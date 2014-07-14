@@ -22,8 +22,12 @@ class Injector
         // injection contains class injection
         $injection = array();
 
-        foreach ($inspector->getClassInjection($class) as $name => $value) {
-            $injection[$name] = $this->getManager()->get($value);
+        foreach ($inspector->getClassInjection($class) as $name => $inject) {
+            if($inject['new']) {
+                $injection[$name] = $this->getManager()->create($inject['class']);
+            } else {
+                $injection[$name] = $this->getManager()->get($inject['class']);
+            }
         }
 
         $properties = $inspector->getClassProperties($class);

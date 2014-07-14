@@ -16,6 +16,11 @@ class Manager
     /**
      * @var array
      */
+    protected $instances = array();
+
+    /**
+     * @var array
+     */
     protected $callback = array();
 
     /**
@@ -87,6 +92,26 @@ class Manager
     function getConfigureAllProperties()
     {
         return $this->configureAllProperties;
+    }
+
+    /**
+     * @param string $class
+     * @return mixed
+     * @throws Exception
+     */
+    public function getInstance($class)
+    {
+        return $this->get($class);
+    }
+
+    /**
+     * @param string $class
+     * @return array
+     * @throws Exception
+     */
+    public function getInstances($class)
+    {
+        return isset($this->instances[$class]) ? $this->instances[$class] : array();
     }
 
     /**
@@ -187,6 +212,12 @@ class Manager
         } else {
             $this->getInjector()->process($instance, $parameters);
         }
+
+        if (!isset($this->instances[$class])) {
+            $this->instances[$class] = array();
+        }
+
+        $this->instances[$class][] = $instance;
 
         return $instance;
     }
