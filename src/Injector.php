@@ -2,6 +2,8 @@
 
 namespace Cti\Di;
 
+use SplObjectStorage;
+
 /**
  * Class Injector
  * @package Cti\Di
@@ -12,6 +14,13 @@ class Injector
      * @var Manager
      */
     public $manager;
+
+    public $references;
+
+    function __construct()
+    {
+        $this->references = new SplObjectStorage;
+    }
 
     function process($instance, $parameters)
     {
@@ -28,6 +37,18 @@ class Injector
             } else {
                 $injection[$name] = $this->getManager()->get($inject['class']);
             }
+
+            $list =  array();
+            if($this->references->offsetExists($injection[$name])) {
+                $list = $this->references->offsetGet($injection[$name]);
+            }
+
+            $list[] = array(
+                'instance' => $instance,
+                'property' => $name
+            );
+
+            $this->references->offsetSet($injection[$name], $list);
         }
 
         $properties = $inspector->getClassProperties($class);
@@ -69,7 +90,11 @@ class Injector
     public function getInspector()
     {
         return $this->getManager()->getInspector();
+    }
 
+    public function getReferences($instance)
+    {
+        return isset($this->references[$instance]) ? $this->references[$instance] : array();
     }
 
 } 
