@@ -19,6 +19,10 @@ class NewTests extends PHPUnit_Framework_TestCase
 
         $this->assertNotSame($new->module1, $new->module2);
 
+        $this->assertSame($manager->getInjector()->getReferences($new->module1), array(array(
+            'instance' => $new,
+            'property' => 'module1'
+        )));
         $this->assertSame($manager->getInstances('Common\Module'), array($new->module1, $new->module2));
 
         $new2 = $manager->create('Common\InjectNew');
