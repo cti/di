@@ -12,6 +12,7 @@ class DiTests extends PHPUnit_Framework_TestCase
     {
         $manager = new \Common\CustomManager();
         $this->assertSame($manager, $manager->get('Cti\\Di\\Manager'));
+        $this->assertSame($manager->getInspector(), $manager->getInspector());        
     }
 
     public function testProtectedInit()

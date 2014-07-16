@@ -11,7 +11,7 @@ class NewTests extends PHPUnit_Framework_TestCase
     function testNew()
     {
         $manager = new Manager;
-        $new = $manager->get('Common\InjectNew');
+        $new = $manager->getInstance('Common\InjectNew');
         $this->assertInstanceOf('Common\InjectNew', $new);
 
         $this->assertInstanceOf('Common\Module', $new->module1);
