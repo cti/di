@@ -39,7 +39,7 @@ $configuration->load('/path/to/config.php');
 
 # Manage by hand
 
-Configuration object is optional, but it is very useful for configure instances.
+Configuration object is optional, but it is very useful for instances configuration.
 
 ```php
 <?php
