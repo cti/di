@@ -12,7 +12,7 @@ class Test
 
     public init()
     {
-        foreach($classes as $class) {
+        foreach($this->classes as $class) {
             echo $class, PHP_EOL;
         }
     }
