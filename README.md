@@ -1,5 +1,7 @@
 # Dependency Manager
 
+This project is not supported any more. You can replace it with [league container](http://container.thephpleague.com)
+
 [![Latest Stable Version](https://poser.pugx.org/cti/di/v/stable.png)](https://packagist.org/packages/cti/di)
 [![Total Downloads](https://poser.pugx.org/cti/di/downloads.png)](https://packagist.org/packages/cti/di)
 [![License](https://poser.pugx.org/cti/di/license.png)](https://packagist.org/packages/cti/di)
